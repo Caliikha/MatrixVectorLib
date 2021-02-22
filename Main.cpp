@@ -11,19 +11,19 @@ int main()
 
 	Matrix4x4 Xmtrx = {
 		1,		0,		0,		0,
-		0, cos(PI/2), -sin(PI/2),	0,
-		0, sin(PI/2), cos(PI/2),	0,
+		0, cos(PI/2), 		-sin(PI/2),		0,
+		0, sin(PI/2), 		cos(PI/2),		0,
 		0,		0,		0,		1
 	};
 	Matrix4x4 Ymtrx = {
-		cos(PI / 2), 0, sin(PI / 2), 0,
+		cos(PI / 2), 0, sin(PI / 2), 			0,
 		0,		1,		0,		0,
-		-sin(PI / 2), 0, cos(PI / 2), 0,
+		-sin(PI / 2), 0, cos(PI / 2), 			0,
 		0,		0,		0,		1
 	};
 	Matrix4x4 Zmtrx = {
-		cos(PI / 2), -sin(PI / 2), 0, 0,
-		sin(PI / 2), cos(PI / 2), 0, 0,
+		cos(PI / 2), -sin(PI / 2), 	0, 		0,
+		sin(PI / 2), cos(PI / 2), 	0, 		0,
 		0,		0,		1,		0,
 		0,		0,		0,		1
 	};
