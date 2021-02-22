@@ -89,6 +89,7 @@ public:
 				resultMtrx.matrix[i][j] = (scale * matrix[i][j]);
 			}
 		}
+		
 		return resultMtrx;
 	}
 
@@ -133,6 +134,8 @@ public:
 			std::cout << "\n";
 		}
 		std::cout << "\n";
+		
+		return resultMtrx;
 	}
 
 	Matrix4x4 subtract(Matrix4x4 MtrxB) {
@@ -146,5 +149,7 @@ public:
 			std::cout << "\n";
 		}
 		std::cout << "\n";
+		
+		return resultMtrx;
 	}
 };
