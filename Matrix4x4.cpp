@@ -18,11 +18,11 @@ public:
 	}
 
 	template<typename TYPE>
-	void printVal(TYPE value) {
+	void printvalue(TYPE value) {
 		std::cout << value << std::endl;
 	}
 
-	void printVal() {
+	void printmtrx() {
 		for (int i = 0; i < Rows; i++) {
 			for (int j = 0; j < Cols; j++) {
 				std::cout << matrix[i][j] << " ";
@@ -89,7 +89,7 @@ public:
 				resultMtrx.matrix[i][j] = (scale * matrix[i][j]);
 			}
 		}
-		
+
 		return resultMtrx;
 	}
 
@@ -134,7 +134,7 @@ public:
 			std::cout << "\n";
 		}
 		std::cout << "\n";
-		
+
 		return resultMtrx;
 	}
 
@@ -149,7 +149,7 @@ public:
 			std::cout << "\n";
 		}
 		std::cout << "\n";
-		
+
 		return resultMtrx;
 	}
 };
