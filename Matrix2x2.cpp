@@ -1,5 +1,3 @@
-//Matrix Class as of 20/01/2021
-
 #pragma once
 #include <iostream>
 
@@ -25,11 +23,11 @@ public:
 	}
 
 	template<typename TYPE>
-	void printVal(TYPE value) {
+	void printvalue(TYPE value) {
 		std::cout << value << std::endl;
 	}
 
-	void printVal() {
+	void printmtrx() {
 		for (int i = 0; i < Rows; i++) {
 			for (int j = 0; j < Cols; j++) {
 				std::cout << matrix[i][j] << " ";
