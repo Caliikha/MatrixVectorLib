@@ -5,7 +5,6 @@
 class vector4 {
 public:
 	float x = 0, y = 0, z = 0, w = 0;
-	//float array[4] = {};
 
 	void input() {
 		std::cin >> x, y, z, w;
@@ -23,6 +22,14 @@ public:
 		float Product = dotproduct(inputvctr);
 		float Magnitude = sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2)) * sqrt(pow(inputvctr.x, 2) + pow(inputvctr.y, 2) + pow(inputvctr.z, 2));
 		return acos(Product / Magnitude) * (180 / PI);
+	}
+	
+	vector4 resultant(vector4 inputvctr) {
+		vector4 resultVector;
+		resultVector.x = sqrt(pow(x, 2) + pow(inputvctr.x, 2));
+		resultVector.y = sqrt(pow(y, 2) + pow(inputvctr.y, 2));
+		resultVector.z = sqrt(pow(z, 2) + pow(inputvctr.z, 2));
+		return resultVector;
 	}
 	
 	vector4 scale(float scale) {
