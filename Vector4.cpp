@@ -15,6 +15,16 @@ public:
 		std::cout << "(" << x << ", " << y << ", " << z << ", " << w << ")" << "\n";
 	}
 	
+	float dotproduct(vector4 inputvctr) {
+		return (x * inputvctr.x) + (y * inputvctr.y) + (z * inputvctr.z);
+	}
+
+	float angle(vector4 inputvctr) {
+		float Product = dotproduct(inputvctr);
+		float Magnitude = sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2)) * sqrt(pow(inputvctr.x, 2) + pow(inputvctr.y, 2) + pow(inputvctr.z, 2));
+		return acos(Product / Magnitude) * (180 / PI);
+	}
+	
 	vector4 scale(float scale) {
 		vector4 resultVector;
 		resultVector.x = x * scale;
