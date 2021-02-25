@@ -57,11 +57,11 @@ public:
 		}
 	}
 
-	float determinant() {
-		return ((matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]));
+	float determinant() { // not fully developed, incorrect values will be returned
+		return ((matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0])); 
 	}
 
-	Matrix4x4 inverse() {
+	Matrix4x4 inverse() { // not fully developed, incorrect values will be returned
 		Matrix4x4 InvMat;
 		float C = 1 / determinant();
 
