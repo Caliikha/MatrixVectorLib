@@ -21,7 +21,18 @@ vector4::rotate() incorrect mathematics used, will return incorrect values
 vector4::testrotate() incorrect mathematics used, will return incorrect values
 
 
+
 # Future Implementation
+
+-> Adding vector addition and subtraction operations
+
+-> Adding vector cross product operation
+
+-> Adapting existing code for a new Matrix3x3 class with existing Matrix4x4 class operations
+
+-> Adapting existing code for a new Vector3 class with existing Vector4 class operations
+
+-> Adapting existing code for a new Vector2 class with existing Vector3 class operations
 
 -> Implementing a trace() and transpose() function on all Matrix classes
 
@@ -29,9 +40,6 @@ vector4::testrotate() incorrect mathematics used, will return incorrect values
 
 -> After completing the determinant function for Matrix4x4, the determinant(), inverse(), and divide() functions will work correctly
 
--> Adding vector addition and subtraction operations
-
--> Adding vector cross product operation
 
 
 # Additions since uploading Library
