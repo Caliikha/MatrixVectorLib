@@ -29,6 +29,10 @@ vector4::testrotate() incorrect mathematics used, will return incorrect values
 
 -> After completing the determinant function for Matrix4x4, the determinant(), inverse(), and divide() functions will work correctly
 
+-> Adding vector addition and subtraction operations
+
+-> Adding vector cross product operation
+
 
 # Additions since uploading Library
 
