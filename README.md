@@ -33,12 +33,15 @@ vector4::testrotate() incorrect mathematics used, will return incorrect values
 # Additions since uploading Library
 
 Added dotproduct() function to Vector4 class
+    
     -> dotproduct(vector4 inputvctr) -> call on a vector4 object and input a second vector to return their dot product (returns float type)
 
 Added angle() function to Vector4 class
+    
     -> angle(vector4 inputvctr) -> call on a vector4 object and input a second vector to return the angle between them (returns float type) -> in degrees
     
 Added reultant() function to Vector4 class
+    
     -> resultant(vector4 inputvctr) -> call on a vector4 object and input a second vector to return the resultant vector (returns vector4 type)
     
 Added Walk-through/Documentation main.cpp file for a clearer understand of how the library works
