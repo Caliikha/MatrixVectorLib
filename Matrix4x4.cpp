@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342
 
 class Matrix4x4 {
 private:
@@ -8,51 +9,46 @@ private:
 public:
 	float matrix[Rows][Cols] = { };
 
-	void identity() {
-		for (int i = 0; i < Rows; i++) {
-			for (int j = 0; j < Cols; j++) {
-				matrix[i][j] = 0;
-			}
-			matrix[i][i] = 1;
-		}
-	}
+	Matrix4x4 identity() {
+        	Matrix4x4 resultMtrx = {};
+        	resultMtrx.matrix[0][0] = 1;
+        	resultMtrx.matrix[1][1] = 1;
+        	resultMtrx.matrix[2][2] = 1;
+        	resultMtrx.matrix[3][3] = 1;
 
-	template<typename TYPE>
-	void printvalue(TYPE value) {
-		std::cout << value << std::endl;
+        	return resultMtrx;
 	}
 
 	void printmtrx() {
 		for (int i = 0; i < Rows; i++) {
 			for (int j = 0; j < Cols; j++) {
-				std::cout << matrix[i][j] << " ";
+				std::cout << matrix[i][j] << ' ';
 			}
 			std::cout << '\n';
 		}
 		std::cout << '\n';
 	}
 
-	//void define(float a = INT_MAX, float b = INT_MAX, float c = INT_MAX, float d = INT_MAX) { // useless function, you can use CML::Matrix4x4 mtrx = { ... };
-	//	matrix[0][0] = a;
-	//	matrix[0][1] = b;
-	//	matrix[1][0] = c;
-	//	matrix[1][1] = d;
-	//}
+	template <typename TYPE>
+    	static void showResult(TYPE input) {
+        	std::cout << input << '\n';
+    	}
 
-	static void showResult(Matrix4x4 mtrx) {
+
+	static void showResult(Matrix4x4 inputmtrx) {
 		for (int i = 0; i < Rows; i++) {
 			for (int j = 0; j < Cols; j++) {
-				std::cout << mtrx.matrix[i][j] << " ";
+				std::cout << inputmtrx.matrix[i][j] << ' ';
 			}
 			std::cout << '\n';
 		}
 		std::cout << '\n';
 	}
 
-	void input() {
+	static void input(Matrix4x4 inputmtrx) {
 		for (int i = 0; i < Rows; i++) {
 			for (int j = 0; j < Cols; j++) {
-				std::cin >> matrix[i][j];
+				std::cin >> inputmtrx.matrix[i][j];
 			}
 		}
 	}
@@ -61,29 +57,31 @@ public:
 		return ((matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0])); 
 	}
 
-	Matrix4x4 inverse() { // not fully developed, incorrect values will be returned
-		Matrix4x4 InvMat;
-		float C = 1 / determinant();
+//	float determinant() { 
+        	// TODO: Complete when 3x3 determinant exists, using cofactor method or some dynamic matrix alternative
+//	}
 
-		InvMat.matrix[0][0] = { C * matrix[1][1] };
-		InvMat.matrix[0][1] = { C * -matrix[0][1] };
-		InvMat.matrix[1][0] = { C * -matrix[1][0] };
-		InvMat.matrix[1][1] = { C * matrix[0][0] };
+//	Matrix4x4 inverse() { // not fully developed, incorrect values will be returned
+        	// TODO: Complete when determinant function exists 
+//	}
 
-		for (int i = 0; i < Rows; i++) {
-			for (int j = 0; j < Cols; j++) {
-				std::cout << InvMat.matrix[i][j] << " ";
-			}
-			std::cout << "\n";
-		}
-		std::cout << "\n";
+	Matrix4x4 transpose(){
+        	Matrix4x4 resultMtrx;
+        	for (int i = 0; i < Rows; i++){
+            		for (int j = 0; j < Cols; j++){
+                		resultMtrx.matrix[j][i] = matrix[i][j];
+            		}
+        	}
+        
+        	return resultMtrx;
+    	}
 
-		return InvMat;
-	}
-
+	float trace() {
+        	return (matrix[0][0] + matrix[1][1] + matrix[2][2] + matrix[3][3]);
+    	}
+	
 	Matrix4x4 scale(float scale) {
 		Matrix4x4 resultMtrx;
-
 		for (int i = 0; i < Rows; i++) {
 			for (int j = 0; j < Cols; j++) {
 				resultMtrx.matrix[i][j] = (scale * matrix[i][j]);
@@ -93,63 +91,47 @@ public:
 		return resultMtrx;
 	}
 
-	Matrix4x4 multiply(Matrix4x4 MtrxB) {
-		Matrix4x4 resultMtrx = { };
-
-		for (int i = 0; i < Rows; i++) {
-			for (int j = 0; j < Cols; j++) {
-				resultMtrx.matrix[i][j] = { (matrix[i][0] * MtrxB.matrix[0][j]) + (matrix[i][1] * MtrxB.matrix[1][j]) };
-				std::cout << resultMtrx.matrix[i][j] << " ";
-			}
-			std::cout << "\n";
-		}
-		std::cout << "\n";
+	Matrix4x4 multiply(Matrix4x4 inputmtrx) {
+		Matrix4x4 resultMtrx = {};
+        	for (int i = 0; i < Rows; i++){
+            		for (int j = 0; j < Cols; j++){
+                		for (int k = 0; k < Rows; k++){
+                     			resultMtrx.matrix[i][j] += matrix[i][k] * inputmtrx.matrix[k][j];
+                		}
+            		}
+        	}
 
 		return resultMtrx;
 	}
 
-	Matrix4x4 divide(Matrix4x4 MtrxB) {
-		Matrix4x4 resultMtrx;
-		Matrix4x4 InvB = MtrxB.inverse();
 
-		for (int i = 0; i < Rows; i++) {
-			for (int j = 0; j < Cols; j++) {
-				resultMtrx.matrix[i][j] = { (matrix[i][0] * InvB.matrix[0][j]) + (matrix[i][1] * InvB.matrix[1][j]) };
-				std::cout << resultMtrx.matrix[i][j] << " ";
-			}
-			std::cout << "\n";
-		}
-		std::cout << "\n";
+//	Matrix4x4 divide(Matrix4x4 inputmtrx) {
+	  // TODO:Complete when determinant and inverse function exists 
+      
+// 	     return multiply(inputmtrx.inverse());
+//	}
 
-		return resultMtrx;
-	}
 
-	Matrix4x4 add(Matrix4x4 MtrxB) {
+	Matrix4x4 add(Matrix4x4 inputmtrx) {
 		Matrix4x4 resultMtrx;
 		for (int i = 0; i < Rows; i++) {
 			for (int j = 0; j < Cols; j++) {
-				resultMtrx.matrix[i][j] = { matrix[i][j] + MtrxB.matrix[i][j] };
-				std::cout << resultMtrx.matrix[i][j] << " ";
+				resultMtrx.matrix[i][j] = { matrix[i][j] + inputmtrx.matrix[i][j] };
 			}
-			std::cout << "\n";
 		}
-		std::cout << "\n";
 
 		return resultMtrx;
 	}
 
-	Matrix4x4 subtract(Matrix4x4 MtrxB) {
+	Matrix4x4 subtract(Matrix4x4 inputmtrx) {
 		Matrix4x4 resultMtrx = { };
-
 		for (int i = 0; i < Rows; i++) {
 			for (int j = 0; j < Cols; j++) {
-				resultMtrx.matrix[i][j] = { matrix[i][j] - MtrxB.matrix[i][j] };
-				std::cout << resultMtrx.matrix[i][j];
+				resultMtrx.matrix[i][j] = { matrix[i][j] - inputmtrx.matrix[i][j] };
 			}
-			std::cout << "\n";
 		}
-		std::cout << "\n";
 
 		return resultMtrx;
 	}
+
 };
