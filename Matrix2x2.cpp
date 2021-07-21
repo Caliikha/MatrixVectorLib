@@ -1,66 +1,50 @@
 #pragma once
 #include <iostream>
+#define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342
 
 class Matrix2x2 {
 private:
-	static unsigned const int Rows = 2;
-	static unsigned const int Cols = 2;
+	static const int Rows = 2;
+	static const int Cols = 2;
 public:
 	float matrix[Rows][Cols] = { };
 
-	void identity() {
+	Matrix2x2 identity() {
+        Matrix2x2 resultMtrx = {};
 		matrix[0][0] = 1;
-		matrix[0][1] = 0;
-		matrix[1][0] = 0;
 		matrix[1][1] = 1;
-	}
-
-	void define(float a, float b, float c, float d) {
-		matrix[0][0] = a;
-		matrix[0][1] = b;
-		matrix[1][0] = c;
-		matrix[1][1] = d;
-	}
-
-	template<typename TYPE>
-	void printvalue(TYPE value) {
-		std::cout << value << std::endl;
+        return resultMtrx;
 	}
 
 	void printmtrx() {
 		for (int i = 0; i < Rows; i++) {
 			for (int j = 0; j < Cols; j++) {
-				std::cout << matrix[i][j] << " ";
+				std::cout << matrix[i][j] << ' ';
 			}
 			std::cout << '\n';
 		}
 		std::cout << '\n';
 	}
 
-	static void showResult(Matrix2x2 mtrx) {
+	template <typename TYPE>
+	static void showResult(TYPE input) { 
+		std::cout << input << '\n';
+	}
+
+	static void showResult(Matrix2x2 inputmtrx) {
 		for (int i = 0; i < Rows; i++) {
 			for (int j = 0; j < Cols; j++) {
-				std::cout << mtrx.matrix[i][j] << " ";
+				std::cout << inputmtrx.matrix[i][j] << ' ';
 			}
 			std::cout << '\n';
 		}
 		std::cout << '\n';
 	}
 
-	//void showMtrx() {
-	//	for (int i = 0; i < 2; i++) {
-	//		for (int j = 0; j < 2; j++) {
-	//			std::cout << matrix[i][j] << " ";
-	//		}
-	//		std::cout << "\n";
-	//	}
-	//	std::cout << "\n";
-	//}
-
-	void input() {
+	static void input(Matrix2x2 inputmtrx) {
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				std::cin >> matrix[i][j];
+				std::cin >> inputmtrx.matrix[i][j];
 			}
 		}
 	}
@@ -71,62 +55,60 @@ public:
 
 	Matrix2x2 inverse() {
 		Matrix2x2 InvMat;
-		float C = 1 / determinant();
+		float Const = 1 / determinant();
 
-		InvMat.matrix[0][0] = { C * matrix[1][1] };
-		InvMat.matrix[0][1] = { C * -matrix[0][1] };
-		InvMat.matrix[1][0] = { C * -matrix[1][0] };
-		InvMat.matrix[1][1] = { C * matrix[0][0] };
-
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
-				std::cout << InvMat.matrix[i][j] << " ";
-			}
-			std::cout << "\n";
-		}
-		std::cout << "\n";
+		InvMat.matrix[0][0] = { Const * matrix[1][1] };
+		InvMat.matrix[0][1] = { Const * -matrix[0][1] };
+		InvMat.matrix[1][0] = { Const * -matrix[1][0] };
+		InvMat.matrix[1][1] = { Const * matrix[0][0] };
 
 		return InvMat;
 	}
 
+    Matrix2x2 transpose() {
+        Matrix2x2 resultMtrx;
+
+        for (int i = 0; i < Rows; i++){
+            for (int j = 0; j < Cols; j++){
+                resultMtrx.matrix[j][i] = matrix[i][j];
+            }
+        }
+
+        return resultMtrx;
+    }
+
+    float trace() {
+        return (matrix[0][0] + matrix[1][1]);
+    }
+
 	Matrix2x2 scale(float scale) {
 		Matrix2x2 resultMtrx;
+
 		for (int i = 0; i < Rows; i++) {
 			for (int j = 0; j < Cols; j++) {
 				resultMtrx.matrix[i][j] = (scale * matrix[i][j]);
 			}
 		}
-		return resultMtrx;
-	}
-
-	Matrix2x2 multiply(Matrix2x2 MtrxB) {
-		Matrix2x2 resultMtrx = { };
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
-				resultMtrx.matrix[i][j] = { (matrix[i][0] * MtrxB.matrix[0][j]) + (matrix[i][1] * MtrxB.matrix[1][j]) };
-				std::cout << resultMtrx.matrix[i][j] << " ";
-			}
-			std::cout << "\n";
-		}
-		std::cout << "\n";
 
 		return resultMtrx;
 	}
 
-	Matrix2x2 divide(Matrix2x2 MtrxB) {
-		Matrix2x2 resultMtrx = { };
-		Matrix2x2 InvB = MtrxB.inverse();
-
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
-				resultMtrx.matrix[i][j] = { (matrix[i][0] * InvB.matrix[0][j]) + (matrix[i][1] * InvB.matrix[1][j]) };
-				std::cout << resultMtrx.matrix[i][j] << " ";
-			}
-			std::cout << "\n";
-		}
-		std::cout << "\n";
+	Matrix2x2 multiply(Matrix2x2 inputmtrx) {
+		Matrix2x2 resultMtrx = {};
+        
+        for (int i = 0; i < Rows; i++){
+            for (int j = 0; j < Cols; j++){
+                for (int k = 0; k < Rows; k++){
+                     resultMtrx.matrix[i][j] += matrix[i][k] * inputmtrx.matrix[k][j];
+                }
+            }
+        }
 
 		return resultMtrx;
+	}
+
+	Matrix2x2 divide(Matrix2x2 inputmtrx) {
+        return multiply(inputmtrx.inverse());
 	}
 
 	Matrix2x2 add(Matrix2x2 MtrxB) {
@@ -135,22 +117,21 @@ public:
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
 				resultMtrx.matrix[i][j] = { matrix[i][j] + MtrxB.matrix[i][j] };
-				std::cout << resultMtrx.matrix[i][j] << " ";
 			}
-			std::cout << "\n";
 		}
-		std::cout << "\n";
+
+		return resultMtrx;
 	}
 
 	Matrix2x2 subtract(Matrix2x2 MtrxB) {
 		Matrix2x2 resultMtrx = { };
+
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
 				resultMtrx.matrix[i][j] = { matrix[i][j] - MtrxB.matrix[i][j] };
-				std::cout << resultMtrx.matrix[i][j];
 			}
-			std::cout << "\n";
 		}
-		std::cout << "\n";
+
+		return resultMtrx;
 	}
 };
