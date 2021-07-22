@@ -51,12 +51,26 @@ public:
 		}
 	}
 
-//	float determinant() { 
-        // TODO: Develop determinant using cofactor method or 3x5 matrix method
-//	}
+	float determinant() { 
+	        Matrix2x2 Cofactor_1 = {
+            		matrix[1][1], matrix[1][2],
+            		matrix[2][1], matrix[2][2]
+        	};
+        	Matrix2x2 Cofactor_2 = {
+            		matrix[1][0], matrix[1][2],
+            		matrix[2][0], matrix[2][2]
+        	};
+        	Matrix2x2 Cofactor_3 = {
+            		matrix[1][0], matrix[1][1],
+            		matrix[2][0], matrix[2][1]
+        	};
+        	return (matrix[0][0] * Cofactor_1.determinant()) 
+               	      -(matrix[0][1] * Cofactor_2.determinant())
+             	      +(matrix[0][2] * Cofactor_3.determinant());
+	}
 
 //	Matrix3x3 inverse() { // incorrect mathematics not developed
-        // TODO:Complete when determinant function exists 
+        // TODO: Will complete soon after completing determinant() function
 //	}
 
 	Matrix3x3 transpose() { 
