@@ -53,10 +53,6 @@ public:
 		}
 	}
 
-	float determinant() { // not fully developed, incorrect values will be returned
-		return ((matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0])); 
-	}
-
 //	float determinant() { 
         	// TODO: Complete when 3x3 determinant exists, using cofactor method or some dynamic matrix alternative
 //	}
