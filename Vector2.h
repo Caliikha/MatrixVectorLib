@@ -22,16 +22,16 @@ public:
 	}
 
 	static void showResult(Vector2 inputvctr) {
-        std::cout << '(' << inputvctr.x << ", " << inputvctr.y << ')' << '\n';
+        	std::cout << '(' << inputvctr.x << ", " << inputvctr.y << ')' << '\n';
 	}
 
 	float dotproduct(Vector2 inputvctr) {
 		return (x * inputvctr.x) + (y * inputvctr.y);
 	}
 
-    float magnitude() {
-        return sqrt(pow(x, 2) + pow(y, 2));
-    }
+    	float magnitude() {
+        	return sqrt(pow(x, 2) + pow(y, 2));
+    	}
 
 	float angle(Vector2 inputvctr) {
 		float Product = dotproduct(inputvctr);
@@ -56,32 +56,32 @@ public:
 
 	Vector2 scale(float scale) {
 		Vector2 resultVector;
-            return resultVector = {x * scale, y * scale};
+            	return resultVector = {x * scale, y * scale};
 	}
 
-    Vector2 scale(Matrix2x2 inputmtrx) {
-        Vector2 resultVector;
-        return resultVector = {
-            x * inputmtrx.matrix[0][0],
-            y * inputmtrx.matrix[1][1]
-        };
-    }
+    	Vector2 scale(Matrix2x2 inputmtrx) {
+        	Vector2 resultVector;
+        	return resultVector = {
+            		x * inputmtrx.matrix[0][0],
+            		y * inputmtrx.matrix[1][1]
+        	};
+    	}
 
 	Vector2 rotate(Matrix2x2 inputmtrx) { 
 		Vector2 resultVector;
 		return resultVector = {
-            (x * inputmtrx.matrix[0][0]) + (y * inputmtrx.matrix[0][1]),
-            (x * inputmtrx.matrix[1][0]) + (y * inputmtrx.matrix[1][1])
-        };
+            		(x * inputmtrx.matrix[0][0]) + (y * inputmtrx.matrix[0][1]),
+            		(x * inputmtrx.matrix[1][0]) + (y * inputmtrx.matrix[1][1])
+        	};
 	}
 
-    Vector2 translate(Matrix2x2 inputmtrx) {
-        Vector2 resultVector;
-        return resultVector = {
-            x + inputmtrx.matrix[0][1],
-            y + inputmtrx.matrix[1][1]
-        };
-    }
+    	Vector2 translate(Matrix2x2 inputmtrx) {
+        	Vector2 resultVector;
+        	return resultVector = {
+            		x + inputmtrx.matrix[0][1],
+            		y + inputmtrx.matrix[1][1]
+        	};
+    	}
 
 //    Vector2 crossproduct(Vector2 inputvctr) {
         // TODO
