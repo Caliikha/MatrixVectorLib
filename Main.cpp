@@ -11,12 +11,12 @@
 				I'd wish you good luck, but i know it's super easy to break this/find problems
 */
 
-#include "./MatrixFiles/Matrix4x4.h"
-#include "./MatrixFiles/Matrix3x3.h"
-#include "./MatrixFiles/Matrix2x2.h"
-#include "./VectorFiles/Vector4.h"
-#include "./VectorFiles/Vector3.h"
-#include "./VectorFiles/Vector2.h"
+#include "Matrix4x4.h"
+#include "Matrix3x3.h"
+#include "Matrix2x2.h"
+#include "Vector4.h"
+#include "Vector3.h"
+#include "Vector2.h"
 
 //          Keep in mind that C++17 is required to build this library 
 
