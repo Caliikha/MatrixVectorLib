@@ -11,22 +11,29 @@
 				I'd wish you good luck, but i know it's super easy to break this/find problems
 */
 
-#include "Matrix4x4.cpp"
-#include "Matrix2x2.cpp"
-#include "Vector4.cpp"
-#define PI 3.1415926535
+#include "./MatrixFiles/Matrix4x4.h"
+#include "./MatrixFiles/Matrix3x3.h"
+#include "./MatrixFiles/Matrix2x2.h"
+#include "./VectorFiles/Vector4.h"
+#include "./VectorFiles/Vector3.h"
+#include "./VectorFiles/Vector2.h"
+
+//          Keep in mind that C++17 is required to build this library 
 
 //			If you wish to test each showcase individually, i recommend commenting out the rest of the code in main() and going through it part-by-part
 //			running this will just output a bunch of vectors and matricies, so it won't make sense unless you comment out the parts you're not focussing on
+
 
 int main()
 {
 	float ROTATION_ANGLE = PI / 2;
 	float TRANSLATION_MAGNITUDE = 10.0f;
 	float SCALE_MAGNITUDE = 2.0f;
+	
+	Vector4 _Vctr1 = { 1, 2, 3, 4 }; // assign the values of your vector here
+	Vector4 Vctr2 = { 1, 2, 3, 4 }; // second vector for you to test some vector methods
+    	Vector2 Vctr_2d = { 1, 2 };
 
-	vector4 _Vctr1= { 1, 2, 3, 4 }; // assign the values of your vector here
-	vector4 Vctr2 = { 1, 2, 3, 4 }; // second vector for you to test some vector methods
 	
 	//					beginning matrix + vector related operations
 
@@ -39,15 +46,20 @@ int main()
 	// You can repeat all of this with a rotation about X, Y, or Z, if you want to test those out, example matricies are listed under the main() function
 	// Rotating _Vctr1 about the X axis given the angle set by the variable ROTATION_ANGLE, change the varible's value if you want to change the angle
 	
-	_Vctr1.rotate(Xmtrx).printvector(); // DISCLAIMER: all rotate functions are bugged, it will be worked on
+	//_Vctr1.rotate(Xmtrx).printvector(); // DISCLAIMER: all rotate functions are bugged, it will be worked on
+    	// Underneath is an example of how to use the rotate() function for 2D Vectors
+    	Matrix2x2 Rotationmtrx_2D = {
+        	cos(ROTATION_ANGLE),-sin(ROTATION_ANGLE),
+        	sin(ROTATION_ANGLE), cos(ROTATION_ANGLE)
+    	};
 	
 	// you can assign the value of the rotated vector to your original vector, like this _Vctr1 = _Vctr1.rotate(Xmtrx);, then you can _Vctr1.printvector(); in a new line
 
-	Matrix4x4 Translatemtrx = { // matrix to translate X, Y, and Z values of vector
+	Matrix4x4 Translatemtrx = { // matrix to translate X, Y, Z, and W values of vector
 		1,	0,	0,	TRANSLATION_MAGNITUDE,
 		0,	1,	0,	TRANSLATION_MAGNITUDE,
 		0,	0,	1,	TRANSLATION_MAGNITUDE,
-		0,	0,	0,	1
+		0,	0,	0,	TRANSLATION_MAGNITUDE
 	};
 
 	_Vctr1.translate(Translatemtrx).printvector(); // 
@@ -56,7 +68,7 @@ int main()
 		SCALE_MAGNITUDE,	0,	0,	1,
 		0,	SCALE_MAGNITUDE,	0,	1,
 		0,	0,	SCALE_MAGNITUDE,	1,
-		0,	0,	0,	1
+		0,	0,	0,	SCALE_MAGNITUDE
 	};
 
 	_Vctr1.scale(Scalemtrx).printvector(); // DISCLAIMER: there are two scale functions, one using a matrix, another where you can pass in a float value to increase all components of the vector by that scale
@@ -70,25 +82,132 @@ int main()
 
 	// using cout for now, but will make a printing function in the future
 	std::cout << _Vctr1.dotproduct(Vctr2) << "\n"; // the function returns the dot product of these two vectors
+	// or you can use the showResult() function for this
+    	Vector4::showResult(_Vctr1.dotproduct(Vctr2)); // show result can be used for any type, including custom Vector and Matrix types
 	// with the default initializations above, you expect the value 1 here
-
+    
+	Vector4::showResult(_Vctr1.magnitude()); // function that returns the magnitude of the local vector
 
 	std::cout << _Vctr1.angle(Vctr2) << "\n"; // the function returns the angle between the two vectors using the dot product
 	// with the default initializations above, you expect the value 90.0f here, (returns in degrees)
+    		
+	_Vctr1.resultant(Vctr2).printvector(); // and you can call resultant() to find the resultant of the local and inputted vectors
 	
+    	_Vctr1.add(Vctr2).printvector(); // here is an addition function that will simply add each of the values of the components of each vector
 
-	_Vctr1.resultant(Vctr2).printvector(); // the function returns the resultant vector of the object the method is called from, and the input vector
+    	_Vctr1.subtract(Vctr2).printvector(); // likewise, here is a subtraction function that will subtract each value of the components of each vector
 
-
-	// since the default values of the vectors are only in 2D for illustration, the resultant will be at a 45 degree angle, and we can check if everything works correctly with this call:
-	std::cout << _Vctr1.angle(_Vctr1.resultant(Vctr2));
-	// with the default initializations above, you expect this to take the angle of the resultant of those two vectors, which would be 45 degrees
-
+    	_Vctr1.translate(Translatemtrx).printvector(); // additionally, here is a translation function, for basic translation of vector bases with defined Translation matricies
 
 	// some other functions you can use are:
-	// _Vctr1.input(); // allows inputting values during run-time
+    	//Vector4::input(_Vctr1); // allows inputting values during run-time
 
+	
+	
+	
+	    //                          VERY LARGE DISCLAIMER!!!!!!!!!
+    /* 
+     * You may already know that there are a number of operations that would
+     * normally be done on 2D vectors that are still not ready yet for this
+     * library, that would be because of many mathematical issues with such
+     * operations on 4D and 3D vectors
+     *
+     * There is a mathematical concept/field called 'Quaternions', these
+     * quaternions are the basis of how many of these operations can be
+     * completed, such as with rotation of a 3D vector, it can only be done
+     * correctly with quaternions
+     *
+     * Quaternions are modeled as a real number + 3 imaginary numbers, such as
+     * R + i + j + k
+     * you may recognize this as your basic ijk vectors from physics, but with
+     * an additional real number
+     *
+     * In this library, the Vector4 class can be modeled as both a normal 4D
+     * vector, or as a quaternion where the R real number is the W axis
+     * of the vector, so i j k R corresponds with x y z w respectively
+     *
+     * Now underneath, i will show you how you can specifically make operations
+     * on only the i j k aka imaginary part of the quaternion, without
+     * affecting the real part for 3D vector operations (as specific to your
+     * operation)
+     *
+     * This is all using templates and C++17 and above specific concepts, so
+     * you will need to have C++17 to compile this with no errors or warnings
+     * */
 
+    
+	//					Beginning Quaternion/Vector4 related operations/classifications 
+
+    	Vector4 Quaternion = {1, 2, 3, 1}; // i = x = 1 | j = y = 2 | k = z = 3 | w = R/Real = 1
+    	Vector4 NormalVector_4D = {1, 2, 3, 1}; // x, y, z, w | normal 4D vector
+    	Vector3 NormalVector_3D = {1, 2, 3}; // x, y, z | normal 3D vector
+
+    	// This quaternion is modeled as a 3D vector + a real number, therefore,
+    	// whenever you try to for example, rotate the quaternion, you would be
+    	// doing that operation on the 3D vector portion, not affecting the Real
+    	// portion. Otherwise, if you WANT to affect the real portion, then you
+    	// could model it as a 4D vector and use it just like any other class in
+    	// this library
+    
+    	// Vector4::input(Quaternion); // you can use this input function just like other classes   
+
+    	Vector4::showResult(Quaternion.w); // showResult function works like any other, you can input any type, including vectors and matricies
+    	Vector4::showResult(Quaternion);
+    
+    	Vector4::showResult(NormalVector_4D.dotproduct(NormalVector_4D)); // this is just the normal way to call dotproduct() on a 4D vector
+    	Vector4::showResult(Quaternion.dotproduct<Vector3>(NormalVector_3D)); // this call ONLY ACTS ON THE 3D VECTOR PORTION OF THE QUATERNION/4DVECTOR
+    	// to only affect the 3D portion, you should put the <Vector3> template infront of the function
+    
+    	// so, basically to only affect the ijk portion of the quaternion, add <Vector3> infront of the function name when calling
+    	// you can also input a 3D vector (if you are only affecting ijk or the Vector portion of the Quaternion, like shown below
+
+    	Vector4::showResult(Quaternion.magnitude<Vector3>()); // only calculates magnitude of 3D vector portion
+    	Vector4::showResult(NormalVector_4D.magnitude<Vector3>()); // calculates magnitude of whole 4D vector
+    
+    	// This goes on for angle(), resultant(), add(), subtract() and so on
+
+    	// The only difference from here is the interactions with matricies
+
+    	Matrix3x3 Scalemtrx_3x3 = {
+        	SCALE_MAGNITUDE, 0, 0,
+        	0, SCALE_MAGNITUDE, 0,
+        	0, 0, SCALE_MAGNITUDE
+    	};
+
+    	Matrix4x4 Scalemtrx_4x4 = {
+        	SCALE_MAGNITUDE, 0, 0, 0,
+        	0, SCALE_MAGNITUDE, 0, 0,
+        	0, 0, SCALE_MAGNITUDE, 0,
+        	0, 0, 0, SCALE_MAGNITUDE
+    	};
+
+    	Vector4::showResult(Quaternion.scale<Vector3>(Scalemtrx_3x3)); // this will scale the 3D vector portion only
+    	Vector4::showResult(NormalVector_4D.scale(Scalemtrx_4x4)); // this will scale like any normal 4D vector
+
+    	// this is also the same for translate(), where you can separate the real portion with the vector portion
+
+    	Matrix4x4 Translatemtrx_4x4 = {
+        	1, 0, 0, TRANSLATION_MAGNITUDE,
+        	0, 1, 0, TRANSLATION_MAGNITUDE,
+        	0, 0, 1, TRANSLATION_MAGNITUDE,
+        	0, 0, 0, TRANSLATION_MAGNITUDE
+    	};
+
+    	Matrix3x3 Translatemtrx_3x3 = {
+        	1, 0, TRANSLATION_MAGNITUDE,
+        	0, 1, TRANSLATION_MAGNITUDE,
+        	0, 0, TRANSLATION_MAGNITUDE
+    	};
+
+    	Vector4::showResult(Quaternion.translate<Vector3>(Translatemtrx_3x3));
+    	Vector4::showResult(NormalVector_4D.translate(Translatemtrx_4x4));
+    
+    	// that is a basic showcase of the Quaternion/4D Vector differences in this
+    	// library, i definitely do recommend searching and learning more about
+    	// Quaternions because it is not possible to summarize all its properties
+    	// in documentation
+
+	
 	//					Beginning purely Matrix related operations
 
 
@@ -117,27 +236,32 @@ int main()
 	};
 
 	// you can define a matrix to be the identity matrix using this call:
-	_Mtrx1_4x4.identity();
+	_Mtrx1_4x4 =_Mtrx1_4x4.identity();
 	_Mtrx1_4x4.printmtrx();
 
 	// if you are performing an operation that is not necassarily based on a matrix object, you can also use this call to print the matrix
 	Matrix4x4::showResult(_Mtrx1_4x4);
 
 	// you can input at run time using this call
-	// _Mtrx1_4x4.input();
-	_Mtrx1_4x4.printvalue(_Mtrx1_4x4.determinant()); // function that calculated the determinant of the matrix, and the printvalue function is just a standard cout based function that accepts typename datatypes
+    	//Matrix4x4::input(_Mtrx1_4x4);
+	
+    	Matrix2x2::showResult(_Mtrx1_2x2.determinant()); // function that calculated the determinant of the matrix, and the printvalue function is just a standard cout based function that accepts typename datatypes
 
-	_Mtrx1_4x4.inverse().printmtrx(); // function that returns the inverse of the matrix
+	_Mtrx1_2x2.inverse().printmtrx(); // function that returns the inverse of the matrix
 
 	_Mtrx1_4x4.scale(5.0f).printmtrx(); // scales all values of the mtrx by the passed float value
 
+    	_Mtrx1_4x4.transpose().printmtrx(); // transposes the local matrix (aka flipping values by the diagonal)
+
+    	Matrix4x4::showResult(_Mtrx1_4x4.trace()); // returns the trace of the local matrix (aka adds up the diagonal values of the matrix)
+
 	Matrix4x4::showResult(_Mtrx1_4x4.multiply(Mtrx2_4x4)); // DISCLAIMER: you should know that matrixA x matrixB is not the same as matrixB x matrixA, so this function uses the object as A and passed matrix as B, so it is OBJECT x INPUT
-	Matrix4x4::showResult(_Mtrx1_4x4.divide(Mtrx2_4x4)); // If you are wondering about division, it just takes the inverse of the input, and multiplies OBJECT x INVERSE_INPUT
+	Matrix2x2::showResult(_Mtrx1_2x2.divide(Mtrx2_2x2)); // If you are wondering about division, it just takes the inverse of the input, and multiplies OBJECT x INVERSE_INPUT
 	Matrix4x4::showResult(_Mtrx1_4x4.add(Mtrx2_4x4)); // just adds the values of the vectors
 	Matrix4x4::showResult(_Mtrx1_4x4.subtract(Mtrx2_4x4)); // simple matrix subtraction
 
-
-	//				You can repeat all of these operations with the 2x2 matrix libarary, i will not list them here as it is just a showcase
+	//			You can repeat all of these operations with the 2x2, 3x3, or 4x4  matrix libarary, i will not list them here as it is just a showcase
+    	//			Keep in mind that there are a few functions that are not yet developed in the 3x3 and 4x4 classes, such as determinant() or inverse()	
 }
 
 //					For testing the calculations of these functions, i recommend using this website to see if all the operations make sense: https://academo.org/demos/3d-vector-plotter/
