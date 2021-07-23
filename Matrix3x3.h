@@ -10,12 +10,12 @@ public:
 	float matrix[Rows][Cols] = { };
 
 	Matrix3x3 identity() {
-        Matrix3x3 resultMtrx = {};
-        resultMtrx.matrix[0][0] = 1;
-        resultMtrx.matrix[1][1] = 1;
-        resultMtrx.matrix[2][2] = 1;
+        	Matrix3x3 resultMtrx = {};
+        	resultMtrx.matrix[0][0] = 1;
+        	resultMtrx.matrix[1][1] = 1;
+        	resultMtrx.matrix[2][2] = 1;
 
-        return resultMtrx;
+        	return resultMtrx;
 	}
 
 	void printmtrx() {
@@ -86,7 +86,7 @@ public:
 	}
 
 	float trace() { 
-        return (matrix[0][0] + matrix[1][1] + matrix[2][2]);
+        	return (matrix[0][0] + matrix[1][1] + matrix[2][2]);
 	}
 
 	Matrix3x3 scale(float scale) {
@@ -104,13 +104,13 @@ public:
 	Matrix3x3 multiply(Matrix3x3 inputmtrx) {
 		Matrix3x3 resultMtrx = {};
 
-        for (int i = 0; i < Rows; i++){
-            for (int j = 0; j < Cols; j++){
-                for (int k = 0; k < Rows; k++){
-                     resultMtrx.matrix[i][j] += matrix[i][k] * inputmtrx.matrix[k][j];
-                }
-            }
-        }
+        	for (int i = 0; i < Rows; i++){
+            		for (int j = 0; j < Cols; j++){
+                		for (int k = 0; k < Rows; k++){
+                     			resultMtrx.matrix[i][j] += matrix[i][k] * inputmtrx.matrix[k][j];
+                		}
+            		}
+        	}
 
 		return resultMtrx;
 	}
