@@ -13,7 +13,7 @@ public:
 	}
 
 	void printvector() {
-        std::cout << '(' << x << ", " << y << ", " << z << ')' << '\n';
+        	std::cout << '(' << x << ", " << y << ", " << z << ')' << '\n';
 	}
 
 	template <typename TYPE>
@@ -22,18 +22,18 @@ public:
 	}
 
 	static void showResult(Vector3 inputvctr) {
-        std::cout << '(' << inputvctr.x << ", " << inputvctr.y << ", " << inputvctr.z << ')' << '\n';
+        	std::cout << '(' << inputvctr.x << ", " << inputvctr.y << ", " << inputvctr.z << ')' << '\n';
 	}
 
 	float dotproduct(Vector3 inputvctr) {
 		return (x * inputvctr.x) 
-              +(y * inputvctr.y) 
-              +(z * inputvctr.z);
+              	      +(y * inputvctr.y) 
+              	      +(z * inputvctr.z);
 	}
 
-    float magnitude() {
-        return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
-    }
+    	float magnitude() {
+        	return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
+    	}
 
 	float angle(Vector3 inputvctr) {
 		float Product = dotproduct(inputvctr);
@@ -44,46 +44,46 @@ public:
 	Vector3 resultant(Vector3 inputvctr) {
 		Vector3 resultVector;
 		return resultVector = {
-            x + inputvctr.x, 
-            y + inputvctr.y, 
-            z + inputvctr.z
-        };
+            		x + inputvctr.x, 
+            		y + inputvctr.y, 
+            		z + inputvctr.z
+        	};
 	}
 
 	Vector3 add(Vector3 inputvctr) { 
 		Vector3 resultVector;
 		return resultVector = {
-            x + inputvctr.x, 
-            y + inputvctr.y, 
-            z + inputvctr.z
-        };
+            		x + inputvctr.x, 
+            		y + inputvctr.y, 
+            		z + inputvctr.z
+        	};
 	}
 
 	Vector3 subtract(Vector3 inputvctr) { 
 		Vector3 resultVector;
 		return resultVector = {
-            x - inputvctr.x, 
-            y - inputvctr.y, 
-            z - inputvctr.z
-        };
+            		x - inputvctr.x, 
+            		y - inputvctr.y, 
+            		z - inputvctr.z
+        	};
 	}
 
 	Vector3 scale(float scale) {
 		Vector3 resultVector;
-        return resultVector = {
-            x * scale,
-            y * scale,
-            z * scale
-        };
+        	return resultVector = {
+            		x * scale,
+            		y * scale,
+            		z * scale
+        	};
 	}
 
 	Vector3 scale(Matrix3x3 inputmtrx) {
 		Vector3 resultVector;
 		return resultVector = {
-            x * inputmtrx.matrix[0][0], 
-            y * inputmtrx.matrix[1][1],
-            z * inputmtrx.matrix[2][2]
-        };
+            		x * inputmtrx.matrix[0][0], 
+            		y * inputmtrx.matrix[1][1],
+            		z * inputmtrx.matrix[2][2]
+        	};
 	}
 
 //	Vector3 rotate(Matrix3x3 inputmtrx) { // function doesn't work 
@@ -94,14 +94,14 @@ public:
 //		return resultVector;
 //	}
 
-    Vector3 translate(Matrix3x3 inputmtrx){
-        Vector3 resultVector;
-        return resultVector = {
-            x + inputmtrx.matrix[0][2],
-            y + inputmtrx.matrix[1][2],
-            z + inputmtrx.matrix[2][2]
-        };
-    }
+    	Vector3 translate(Matrix3x3 inputmtrx){
+        	Vector3 resultVector;
+        	return resultVector = {
+            		x + inputmtrx.matrix[0][2],
+            		y + inputmtrx.matrix[1][2],
+            		z + inputmtrx.matrix[2][2]
+        	};
+    	}
 
 //    Vector3 crossproduct(Vector3 inputvctr){
         // TODO
