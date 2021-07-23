@@ -10,10 +10,10 @@ public:
 	float matrix[Rows][Cols] = { };
 
 	Matrix2x2 identity() {
-        Matrix2x2 resultMtrx = {};
-		matrix[0][0] = 1;
-		matrix[1][1] = 1;
-        return resultMtrx;
+        	Matrix2x2 resultMtrx = {};
+			matrix[0][0] = 1;
+			matrix[1][1] = 1;
+        	return resultMtrx;
 	}
 
 	void printmtrx() {
@@ -65,21 +65,21 @@ public:
 		return InvMat;
 	}
 
-    Matrix2x2 transpose() {
-        Matrix2x2 resultMtrx;
+    	Matrix2x2 transpose() {
+        	Matrix2x2 resultMtrx;
 
-        for (int i = 0; i < Rows; i++){
-            for (int j = 0; j < Cols; j++){
-                resultMtrx.matrix[j][i] = matrix[i][j];
-            }
-        }
+        	for (int i = 0; i < Rows; i++){
+            		for (int j = 0; j < Cols; j++){
+                		resultMtrx.matrix[j][i] = matrix[i][j];
+            		}
+        	}
 
-        return resultMtrx;
-    }
+        	return resultMtrx;
+    	}
 
-    float trace() {
-        return (matrix[0][0] + matrix[1][1]);
-    }
+    	float trace() {
+        	return (matrix[0][0] + matrix[1][1]);
+    	}
 
 	Matrix2x2 scale(float scale) {
 		Matrix2x2 resultMtrx;
@@ -96,19 +96,19 @@ public:
 	Matrix2x2 multiply(Matrix2x2 inputmtrx) {
 		Matrix2x2 resultMtrx = {};
         
-        for (int i = 0; i < Rows; i++){
-            for (int j = 0; j < Cols; j++){
-                for (int k = 0; k < Rows; k++){
-                     resultMtrx.matrix[i][j] += matrix[i][k] * inputmtrx.matrix[k][j];
-                }
-            }
-        }
+        	for (int i = 0; i < Rows; i++){
+            		for (int j = 0; j < Cols; j++){
+                		for (int k = 0; k < Rows; k++){
+                     			resultMtrx.matrix[i][j] += matrix[i][k] * inputmtrx.matrix[k][j];
+                		}
+            		}
+        	}
 
 		return resultMtrx;
 	}
 
 	Matrix2x2 divide(Matrix2x2 inputmtrx) {
-        return multiply(inputmtrx.inverse());
+        	return multiply(inputmtrx.inverse());
 	}
 
 	Matrix2x2 add(Matrix2x2 MtrxB) {
