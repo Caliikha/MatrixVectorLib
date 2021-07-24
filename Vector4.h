@@ -273,7 +273,24 @@ public:
         	}
 	}
 
-//    Vector4 crossproduct(Vector4 inputvctr){
-        // TODO
-//    }
+    
+	template <class vectordimension = Vector4>
+	vectordimension crossproduct(vectordimension inputvctr) {
+		vectordimension resultVector;
+		static_assert(std::is_same<vectordimension, Vector4>::value || std::is_same<vectordimension, Vector3>::value, "template argument must be the same as function argument input. && input must be of either Vector3 or Vector4 type");
+		if constexpr (std::is_same<vectordimension, Vector4>::value) {
+			Vector3 quaternionVector_local = {x, y, z};
+			Vector3 quaternionVector_input = {inputvctr.x, inputvctr.y, inputvctr.z};
+			Vector3 resultVector_3D = quaternionVector_local.crossproduct(quaternionVector_input);
+			return resultVector = {resultVector_3D.x, resultVector_3D.y, resultVector_3D.z, w};
+		}
+		else if constexpr (std::is_same<vectordimension, Vector3>::value) {
+			Vector3 quaternionVector_local = {x, y, z};
+			return resultVector = quaternionVector_local.crossproduct(inputvctr);
+		}
+		else {
+			std::cerr << "template argument must be the same as function argument input && input must be of either Vector3 or Vector4 type" << std::endl;
+			return resultVector = {INT_MIN, INT_MIN, INT_MIN};
+		}
+	}
 };
