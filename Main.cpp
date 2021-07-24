@@ -33,7 +33,7 @@ int main()
 	Vector4 _Vctr1 = { 1, 2, 3, 4 }; // assign the values of your vector here
 	Vector4 Vctr2 = { 1, 2, 3, 4 }; // second vector for you to test some vector methods
     	Vector2 Vctr_2d = { 1, 2 };
-
+	Vector2 Vctr_2d_2 = {2, 1};
 	
 	//					beginning matrix + vector related operations
 
@@ -99,11 +99,12 @@ int main()
 
     	_Vctr1.translate(Translatemtrx).printvector(); // additionally, here is a translation function, for basic translation of vector bases with defined Translation matricies
 
+	Vector3::showResult(Vctr_2d.crossproduct(Vctr_2d_2)); // this is a function that calculates the cross product of the local vector x the input vector, and returns a 3D vector
+	// since the above function will return a 3D vector, you cannot use .printvector() from a 2D object onto a 3D resultant, therefore you will only be able to display it with the Vector3::showResult() function
+
 	// some other functions you can use are:
     	//Vector4::input(_Vctr1); // allows inputting values during run-time
 
-	
-	
 	
 	    //                          VERY LARGE DISCLAIMER!!!!!!!!!
     /* 
