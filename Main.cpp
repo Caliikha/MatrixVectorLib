@@ -34,7 +34,9 @@ int main()
 	Vector4 Vctr2 = { 1, 2, 3, 4 }; // second vector for you to test some vector methods
     	Vector2 Vctr_2d = { 1, 2 };
 	Vector2 Vctr_2d_2 = {2, 1};
-	
+	Vector3 Vctr_3d = {1, 2, 3};
+	Vector3 Vctr_3d_2 = {0, 1, 0};
+
 	//					beginning matrix + vector related operations
 
 	Matrix4x4 Xmtrx = {
@@ -102,6 +104,10 @@ int main()
 	Vector3::showResult(Vctr_2d.crossproduct(Vctr_2d_2)); // this is a function that calculates the cross product of the local vector x the input vector, and returns a 3D vector
 	// since the above function will return a 3D vector, you cannot use .printvector() from a 2D object onto a 3D resultant, therefore you will only be able to display it with the Vector3::showResult() function
 
+	Vctr_3d.crossproduct(Vctr_3d_2).printvector(); // this function returns the result of the cross product of the local x input vectors
+	//as you can see, since this is a 3D class, then you can use printvector() or Vector3::showResult()
+	//but it's not like the 2D operation which requires Vector3::showResult()
+	
 	// some other functions you can use are:
     	//Vector4::input(_Vctr1); // allows inputting values during run-time
 
