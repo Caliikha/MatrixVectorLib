@@ -102,11 +102,8 @@ int main()
     	_Vctr1.translate(Translatemtrx).printvector(); // additionally, here is a translation function, for basic translation of vector bases with defined Translation matricies
 
 	Vector3::showResult(Vctr_2d.crossproduct(Vctr_2d_2)); // this is a function that calculates the cross product of the local vector x the input vector, and returns a 3D vector
-	// since the above function will return a 3D vector, you cannot use .printvector() from a 2D object onto a 3D resultant, therefore you will only be able to display it with the Vector3::showResult() function
-
-	Vctr_3d.crossproduct(Vctr_3d_2).printvector(); // this function returns the result of the cross product of the local x input vectors
-	//as you can see, since this is a 3D class, then you can use printvector() or Vector3::showResult()
-	//but it's not like the 2D operation which requires Vector3::showResult()
+	
+	Vctr_3d.crossproduct(Vctr_3d_2).printvector(); // this function returns the result of the cross product of the local x input vectors, also returns a 3D vector
 	
 	// some other functions you can use are:
     	//Vector4::input(_Vctr1); // allows inputting values during run-time
@@ -209,6 +206,17 @@ int main()
     	Vector4::showResult(Quaternion.translate<Vector3>(Translatemtrx_3x3));
     	Vector4::showResult(NormalVector_4D.translate(Translatemtrx_4x4));
     
+	_Vctr1.crossproduct(Vctr2).printvector(); // this function will return the cross product of local x input
+	// since 4D vectors don't really have cross products, the actual result is a 3D vector
+	// however this does not mean that the return type is a 3D vector
+	// since you can deal with quaterinions, if you use 4D only, you will return a quaternion with the same Real value as your local vector but the cross product of the returned 3D vector portion    
+	// underneath is a showcase of the different call methods
+
+	_Vctr1.crossproduct(Vctr_3d).printvector(); // returns only Vector3 cross product
+	_Vctr1.crossproduct(Vctr2).printvector(); // returns quaterinion with result as 3D vector portion of the quaternion, and Real value of local vector4
+	// you can also use a template to make it more clear
+	_Vctr1.crossproduct<Vector3>(Vctr_3d).printvector();
+	
     	// that is a basic showcase of the Quaternion/4D Vector differences in this
     	// library, i definitely do recommend searching and learning more about
     	// Quaternions because it is not possible to summarize all its properties
