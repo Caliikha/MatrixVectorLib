@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include "Matrix2x2.h"
+#include "Vector3.h" 
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342
 
 class Vector2 {
@@ -83,7 +84,15 @@ public:
         	};
     	}
 
-//    Vector2 crossproduct(Vector2 inputvctr) {
-        // TODO
-//    }
+    
+	Vector3 crossproduct(Vector2 inputvctr) {
+		Vector3 resultVector = {};
+		Matrix2x2 operatorMatrix = {
+			x, y,
+			inputvctr.x, inputvctr.y
+		};
+
+		resultVector.z = operatorMatrix.determinant();        
+		return resultVector;
+	}
 };
