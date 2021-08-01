@@ -293,4 +293,31 @@ public:
 			return resultVector = {INT_MIN, INT_MIN, INT_MIN};
 		}
 	}
+	    
+	template <class vectordimension = Vector4>    
+	Vector4 multiply(Vector4 inputvctr) {        
+		Vector4 resultVector;        
+		static_assert(std::is_same<vectordimension, Vector4>::value || std::is_same<vectordimension, Vector3>::value, "class specification must be of Vector3 or Vector4[default] type");
+		        
+		if constexpr (std::is_same<vectordimension, Vector4>::value) {            
+			return resultVector = {                
+				w*inputvctr.x + x*inputvctr.w + y*inputvctr.z - z*inputvctr.y,               
+				w*inputvctr.y - x*inputvctr.z + y*inputvctr.w + z*inputvctr.x,                
+				w*inputvctr.z + x*inputvctr.y - y*inputvctr.x + z*inputvctr.w,                
+				w*inputvctr.w - x*inputvctr.x - y*inputvctr.y - z*inputvctr.z            
+				};        
+		}        
+		else if constexpr (std::is_same<vectordimension, Vector3>::value) {            
+			return resultVector = {                
+				w*inputvctr.x + x*inputvctr.w + y*inputvctr.z - z*inputvctr.y,    
+				w*inputvctr.y - x*inputvctr.z + y*inputvctr.w + z*inputvctr.x,                
+				w*inputvctr.z + x*inputvctr.y - y*inputvctr.x + z*inputvctr.w,                
+				w            
+				};        
+		}        
+		else {
+			std::cerr << "Class specification must be of Vector3 or Vector4[default] type" << std::endl;
+			return resultVector = {INT_MIN, INT_MIN, INT_MIN};        
+		}    
+	}
 };
