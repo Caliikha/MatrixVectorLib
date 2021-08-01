@@ -9,7 +9,7 @@ class Vector2 {
 public:
 	float x = 0, y = 0;
 
-	static void input(Vector2 inputvctr) {
+	static void input(Vector2 &inputvctr) {
 		std::cin >> inputvctr.x >> inputvctr.y;
 	}
 
