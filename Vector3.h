@@ -103,7 +103,25 @@ public:
         	};
     	}
 
-//    Vector3 crossproduct(Vector3 inputvctr){
-        // TODO
-//    }
+	Vector3 crossproduct(Vector3 inputvctr) {   
+		Vector3 resultVector;        
+		Matrix2x2 i_matrix = {            
+			y, z,            
+			inputvctr.y, inputvctr.z        
+		};        
+		Matrix2x2 j_matrix = {            
+			x, z,            
+			inputvctr.x, inputvctr.z        
+		};        
+		Matrix2x2 k_matrix = {             
+			x, y,            
+			inputvctr.x, inputvctr.y        
+		};
+        
+		return resultVector = {            
+			i_matrix.determinant(),           
+			-j_matrix.determinant(),            
+			k_matrix.determinant()        
+		};    
+	}
 };
