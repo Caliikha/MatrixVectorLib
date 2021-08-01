@@ -163,10 +163,14 @@ int main()
     	// to only affect the 3D portion, you should put the <Vector3> template infront of the function
     
     	// so, basically to only affect the ijk portion of the quaternion, add <Vector3> infront of the function name when calling
+	    
+	// to display your quaternion in the mathematical/normal format that most people are used to, you can also use .printquaternion()
+	Quaternion.printquaternion();
+
     	// you can also input a 3D vector (if you are only affecting ijk or the Vector portion of the Quaternion, like shown below
 
     	Vector4::showResult(Quaternion.magnitude<Vector3>()); // only calculates magnitude of 3D vector portion
-    	Vector4::showResult(NormalVector_4D.magnitude<Vector3>()); // calculates magnitude of whole 4D vector
+    	Vector4::showResult(NormalVector_4D.magnitude()); // calculates magnitude of whole 4D vector
     
     	// This goes on for angle(), resultant(), add(), subtract() and so on
 
@@ -216,6 +220,9 @@ int main()
 	_Vctr1.crossproduct(Vctr2).printvector(); // returns quaterinion with result as 3D vector portion of the quaternion, and Real value of local vector4
 	// you can also use a template to make it more clear
 	_Vctr1.crossproduct<Vector3>(Vctr_3d).printvector();
+	
+	_Vctr1.multiply(Quaternion).printquaternion(); // completes quaternion multiplication with all components
+	_Vctr1.multiply<Vector3>(Quaternion).printquaternion(); // completes quaternion multiplication with only ijk components
 	
     	// that is a basic showcase of the Quaternion/4D Vector differences in this
     	// library, i definitely do recommend searching and learning more about
