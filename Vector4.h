@@ -11,7 +11,7 @@ class Vector4 {
 public:
 	float x = 0, y = 0, z = 0, w = 0;
 
-	static void input(Vector4 inputvctr) {
+	static void input(Vector4 &inputvctr) {
         	std::cin >> inputvctr.x >> inputvctr.y >> inputvctr.z >> inputvctr.w;
 	}
 
