@@ -8,7 +8,7 @@ class Vector3 {
 public:
 	float x = 0, y = 0, z = 0;
 
-	static void input(Vector3 inputvctr) {
+	static void input(Vector3 &inputvctr) {
 		std::cin >> inputvctr.x >> inputvctr.y >> inputvctr.z;
 	}
 
