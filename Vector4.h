@@ -19,6 +19,31 @@ public:
         	std::cout << '(' << x << ", " << y << ", " << z << ", " << w << ')' << '\n';
 	}
 
+	void printquaternion() {
+		std::cout << '[' << w;
+		if (x >= 0) {
+			std::cout << " + " << x << 'i';
+		}
+		else {
+			std::cout << " - " << abs(x) << 'i';
+		}
+		
+		if (y >= 0) {
+			std::cout << " + " << y << 'j';
+		}
+		else {
+			std::cout << " - " << abs(y) << 'j';        
+		}
+
+		if (z >= 0) {
+			std::cout << " + " << z << 'k';
+		}
+		else {
+			std::cout << " - " << abs(z) << 'k';
+		}
+		std::cout << ']' << '\n';    
+	}
+
     	template <typename TYPE>
     	static void showResult(TYPE input) {
         	std::cout << input << '\n';
