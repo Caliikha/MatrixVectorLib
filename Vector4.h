@@ -25,21 +25,21 @@ public:
 			std::cout << " + " << x << 'i';
 		}
 		else {
-			std::cout << " - " << abs(x) << 'i';
+			std::cout << " - " << -x << 'i';
 		}
 		
 		if (y >= 0) {
 			std::cout << " + " << y << 'j';
 		}
 		else {
-			std::cout << " - " << abs(y) << 'j';        
+			std::cout << " - " << -y << 'j';        
 		}
 
 		if (z >= 0) {
 			std::cout << " + " << z << 'k';
 		}
 		else {
-			std::cout << " - " << abs(z) << 'k';
+			std::cout << " - " << -z << 'k';
 		}
 		std::cout << ']' << '\n';    
 	}
