@@ -109,6 +109,13 @@ public:
             		return INT_MIN;
         	}
 	}
+	    
+	Vector4 conjugate(){
+		Vector4 resultQuaternion;
+		return resultQuaternion = {
+			-x, -y, -z, w
+		};
+	}
 
     	template <typename vectordimension>
 	Vector4 resultant(vectordimension inputvctr) {
