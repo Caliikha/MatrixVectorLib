@@ -40,6 +40,15 @@ public:
 		return acos(Product / Magnitude) * (180 / PI);
 	}
 
+	Vector2 unitvector() {
+		Vector2 resultVector;
+		float denominator = magnitude();
+		return resultVector = {
+			x/denominator,
+			y/denominator
+		};
+	}
+	
 	Vector2 resultant(Vector2 inputvctr) {
 		Vector2 resultVector;
 		return resultVector = {x + inputvctr.x, y + inputvctr.y};
@@ -84,7 +93,6 @@ public:
         	};
     	}
 
-    
 	Vector3 crossproduct(Vector2 inputvctr) {
 		Vector3 resultVector = {};
 		Matrix2x2 operatorMatrix = {
