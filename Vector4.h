@@ -110,6 +110,39 @@ public:
         	}
 	}
 	    
+	template <typename vectordimension = Vector4>
+	Vector4 unitvector() {
+		Vector4 resultVector;
+		static_assert(std::is_same<vectordimension, Vector4>::value || std::is_same<vectordimension, Vector3>::value, "template argument must be a Vector3 or Vector4[default] type");		
+
+		if constexpr (std::is_same<vectordimension, Vector4>::value) {
+			float denominator = magnitude();
+			return resultVector = {
+				x/denominator,
+				y/denominator,
+				z/denominator,
+				w/denominator
+				};
+		}
+		else if constexpr (std::is_same<vectordimension, Vector3>::value) {
+			float denominator = magnitude<Vector3>();
+			return resultVector = {
+				x/denominator,
+				y/denominator,
+				z/denominator,
+				w
+				};
+		}
+		else {
+			std::cerr << "template argument must be a Vector3 or Vector4[default] type" << std::endl;
+			return {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
+		}
+	}
+
+	Vector4 unitquaternion() {
+		return unitvector();
+	}
+
 	Vector4 conjugate(){
 		Vector4 resultQuaternion;
 		return resultQuaternion = {
