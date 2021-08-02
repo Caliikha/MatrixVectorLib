@@ -224,6 +224,12 @@ int main()
 	_Vctr1.multiply(Quaternion).printquaternion(); // completes quaternion multiplication with all components
 	_Vctr1.multiply<Vector3>(Quaternion).printquaternion(); // completes quaternion multiplication with only ijk components
 	
+	// you can also call functions to return the conjugate and inverse of the relevant quaternion (remember that this operation would only make sense on quaternions
+	_Vctr1.conjugate().printquaternion();
+	_Vctr1.inverse().printquaternion();
+	// if you want to keep the R/Real/Scalar value of the quaternion the same as the origina, then you can add a Vector3 template argument like below
+	_Vctr1.inverse<Vector3>().printquaternion();
+	
     	// that is a basic showcase of the Quaternion/4D Vector differences in this
     	// library, i definitely do recommend searching and learning more about
     	// Quaternions because it is not possible to summarize all its properties
