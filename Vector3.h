@@ -41,6 +41,16 @@ public:
 		return acos(Product / Magnitude) * (180 / PI);
 	}
 
+	Vector3 unitvector() {
+		Vector3 resultVector;
+		float denominator = magnitude();
+		return resultVector = {
+			x/denominator,
+			y/denominator,
+			z/denominator
+		};    
+	}
+
 	Vector3 resultant(Vector3 inputvctr) {
 		Vector3 resultVector;
 		return resultVector = {
