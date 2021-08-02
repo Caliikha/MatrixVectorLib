@@ -116,6 +116,34 @@ public:
 			-x, -y, -z, w
 		};
 	}
+	    
+	template <typename vectordimension = Vector4>
+	Vector4 inverse() {
+		Vector4 resultQuaternion;
+		static_assert(std::is_same<vectordimension, Vector4>::value || std::is_same<vectordimension, Vector3>::value, "template input must be a Vector3 or Vector4[default] type");
+		float denominator = pow(magnitude(), 2);
+		
+		if constexpr (std::is_same<vectordimension, Vector4>::value){
+			return resultQuaternion = {
+				-x/denominator,
+				-y/denominator,
+				-z/denominator,
+				w/denominator
+				};
+		}
+		else if constexpr (std::is_same<vectordimension, Vector3>::value) {
+			return resultQuaternion = {
+				-x/denominator,
+				-y/denominator,
+				-z/denominator,
+				w
+				};
+		}
+		else {
+			std::cerr << "template input must be a Vector3 or Vector4[default] type" << std::endl;
+			return resultQuaternion = {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
+		}
+	}
 
     	template <typename vectordimension>
 	Vector4 resultant(vectordimension inputvctr) {
