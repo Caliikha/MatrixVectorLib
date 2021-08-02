@@ -105,6 +105,9 @@ int main()
 	
 	Vctr_3d.crossproduct(Vctr_3d_2).printvector(); // this function returns the result of the cross product of the local x input vectors, also returns a 3D vector
 	
+	_Vctr1.unitvector().printvector(); // this function returns the unit vector in the direction of the local vector
+	// you can also do the same for 3d or 2d vectors
+	
 	// some other functions you can use are:
     	//Vector4::input(_Vctr1); // allows inputting values during run-time
 
@@ -230,6 +233,13 @@ int main()
 	// if you want to keep the R/Real/Scalar value of the quaternion the same as the origina, then you can add a Vector3 template argument like below
 	_Vctr1.inverse<Vector3>().printquaternion();
 	
+	_Vctr1.unitvector().printvector(); // you can return the unit vector with this call
+	// however, if you only want to affect the 3d Vector within (ijk) and not the scalar, add a Vector3 template argument
+	_Vctr1.unitvector<Vector3>().printvector();
+	
+	// or you can simply call unitquaternion if you prefer that syntax over the default unitvector() function
+	_Vctr1.unitquaternion().printquaternion(); // == _Vctr1.unitvector();
+
     	// that is a basic showcase of the Quaternion/4D Vector differences in this
     	// library, i definitely do recommend searching and learning more about
     	// Quaternions because it is not possible to summarize all its properties
