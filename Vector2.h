@@ -103,4 +103,19 @@ public:
 		resultVector.z = operatorMatrix.determinant();        
 		return resultVector;
 	}
+	    
+	Vector2 operator*(const Matrix2x2& right) {
+		Vector2 resultVector;
+		float local_vector_array[2] = {x, y};
+		float result_vector_array[3] = {0, 0};
+		for (int i = 0; i < 2; i++){
+			for (int j = 0; j < 2; j++){
+				result_vector_array[i] += right.matrix[i][j] * local_vector_array[j];
+			}
+		}
+		return resultVector = {
+			result_vector_array[0],
+			result_vector_array[1]
+		};
+	}
 };
