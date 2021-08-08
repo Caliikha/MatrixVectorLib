@@ -123,6 +123,11 @@ int main()
 	Vector4::showResult(_Vctr1 + _Vctr1); // the same as result = _Vctr1 + _Vctr1
 	Vector4::showResult(_Vctr1 - _Vctr1); // the same as result = _Vctr1 - _Vctr1
 	
+	// a standard "power" operation can also be used, with the special case that ^(-1) is interpreted as the inverse of the function
+	// keep in mind that the inverse is only focused on quaternions, not vectors
+	Vector4::showResult(_Vctr1^(3)); // same as taking the power to 3 of all components
+	Vector4::showResult(_Vctr1^(-1));
+	
 	// some other functions you can use are:
     	//Vector4::input(_Vctr1); // allows inputting values during run-time
 
