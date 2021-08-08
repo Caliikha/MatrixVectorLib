@@ -135,19 +135,27 @@ public:
 		};    
 	}
 	
-	    Vector3 operator*(const Matrix3x3& right) {
-		    Vector3 resultVector;
-		    float local_vector_array[3] = {x, y, z};
-		    float result_vector_array[3] = {0, 0, 0};
-		    for (int i = 0; i < 3; i++){
-			    for (int j = 0; j < 3; j++){
-				    result_vector_array[i] += right.matrix[i][j] * local_vector_array[j];
-			    }
-		    }
-		    return resultVector = {
-			    result_vector_array[0],
-			    result_vector_array[1],
-			    result_vector_array[2]
-		     };
-	    }
+	Vector3 operator*(const Matrix3x3& right) {
+		Vector3 resultVector;
+		float local_vector_array[3] = {x, y, z};
+		float result_vector_array[3] = {0, 0, 0};
+		for (int i = 0; i < 3; i++){
+			for (int j = 0; j < 3; j++){
+				result_vector_array[i] += right.matrix[i][j] * local_vector_array[j];   
+			}   
+		}
+		return resultVector = {
+			result_vector_array[0],
+			result_vector_array[1],
+			result_vector_array[2]
+			};	    
+	}
+	
+	Vector3 operator+(const Vector3& right) {
+		return add(right);    
+	}
+
+	Vector3 operator-(const Vector3& right) {
+		return subtract(right);
+	}
 };
