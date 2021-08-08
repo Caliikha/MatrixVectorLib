@@ -119,6 +119,10 @@ int main()
 	_Vctr1 = {3, 7, 5, 4}; // reassigned values for ease of reference when testing with online calculators
 	Vector4::showResult(_Vctr1 * ProductMtrx_4x4); // this can also be done for 3D*3x3 and 2D*2x2
 	
+	// you can also commplete vector addition and subtraction using + and operators
+	Vector4::showResult(_Vctr1 + _Vctr1); // the same as result = _Vctr1 + _Vctr1
+	Vector4::showResult(_Vctr1 - _Vctr1); // the same as result = _Vctr1 - _Vctr1
+	
 	// some other functions you can use are:
     	//Vector4::input(_Vctr1); // allows inputting values during run-time
 
