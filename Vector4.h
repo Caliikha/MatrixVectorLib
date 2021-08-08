@@ -259,6 +259,7 @@ public:
         	}
     	}
 
+	// TODO FIX SCALE() OVERLOAD, DOES NOT ACCEPT INT VALUES
     	template <class vectordimension = Vector4>
 	Vector4 scale(float scale) {
 		Vector4 resultVector;
@@ -429,5 +430,13 @@ public:
 			result_vector_array[2],
 			result_vector_array[3]
 		};
+	}
+	
+	Vector4 operator+(const Vector4& right) {
+		return add(right);    
+	}
+
+	Vector4 operator-(const Vector4& right) {
+		return subtract(right);
 	}
 };
