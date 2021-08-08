@@ -134,4 +134,20 @@ public:
 
 		return resultMtrx;
 	}
+	
+	Matrix2x2 operator*(const Matrix2x2& right) {
+		return multiply(right);    
+	}
+
+	Matrix2x2 operator/(const Matrix2x2& right) {
+		return divide(right);    
+	}
+
+	Matrix2x2 operator+(const Matrix2x2& right) {
+		return add(right);    
+	}
+
+	Matrix2x2 operator-(const Matrix2x2& right) {
+		return subtract(right);
+	}
 };
