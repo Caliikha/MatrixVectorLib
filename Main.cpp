@@ -107,6 +107,17 @@ int main()
 	
 	_Vctr1.unitvector().printvector(); // this function returns the unit vector in the direction of the local vector
 	// you can also do the same for 3d or 2d vectors
+	    
+	// operators can also be used to represent vector-matrix multiplication, however for it to work you must have the vector on the left and matrix on the right
+    
+	Matrix4x4 ProductMtrx_4x4 = { // matrix to show the vector matrix product
+		2, 3, -4, 3,
+		11, 8, 7, 4,
+		2, 5, 3, 2,
+		1, 3, 6, 2
+	};
+	_Vctr1 = {3, 7, 5, 4}; // reassigned values for ease of reference when testing with online calculators
+	Vector4::showResult(_Vctr1 * ProductMtrx_4x4); // this can also be done for 3D*3x3 and 2D*2x2
 	
 	// some other functions you can use are:
     	//Vector4::input(_Vctr1); // allows inputting values during run-time
@@ -299,13 +310,12 @@ int main()
 	Matrix4x4::showResult(_Mtrx1_4x4.subtract(Mtrx2_4x4)); // simple matrix subtraction
 	
 	// in relation to the past few functions you can use your standard c++ operators to call certain functions, for example
-	Matrix4x4 result; // matrix to hold the result of the next few operations
-	result = _Mtrx1_4x4 * Mtrx2_4x4; // this acts the same as result = _Mtrx1_4x4.multiply(Mtrx2_4x4);
-	result = _Mtrx1_4x4 + Mtrx2_4x4; // acts the same as result = _Mtrx1_4x4.add(Mtrx2_4x4);
-	result = _Mtrx1_4x4 - Mtrx2_4x4; // acts the same as result = _Mtrx1_4x4.subtract(Mtrx2_4x4);
-	// you can also use division but only for Matrix2x2 for now since the inverse() functoin is not ready yet for 3x3 and 4x4 matricies    
-	_Mtrx1_2x2 / Mtrx2_2x2; // acts the same as _Mtrx1_2x2.divide(Mtrx2_2x2);
-
+	Matrix4x4::showResult(_Mtrx1_4x4 * Mtrx2_4x4); // this acts the same as result = _Mtrx1_4x4.multiply(Mtrx2_4x4);
+	Matrix4x4::showResult(_Mtrx1_4x4 + Mtrx2_4x4); // acts the same as result = _Mtrx1_4x4.add(Mtrx2_4x4);
+	Matrix4x4::showResult(_Mtrx1_4x4 - Mtrx2_4x4); // acts the same as result = _Mtrx1_4x4.subtract(Mtrx2_4x4);
+	// you can also use division but only for Matrix2x2 for now since the inverse() function is not ready yet for 3x3 and 4x4 matricies
+	Matrix2x2::showResult(_Mtrx1_2x2 / Mtrx2_2x2); // acts the same as result = _Mtrx1_2x2.divide(Mtrx2_2x2);
+	
 	//			You can repeat all of these operations with the 2x2, 3x3, or 4x4  matrix libarary, i will not list them here as it is just a showcase
     	//			Keep in mind that there are a few functions that are not yet developed in the 3x3 and 4x4 classes, such as determinant() or inverse()	
 }
