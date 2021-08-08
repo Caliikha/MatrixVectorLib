@@ -118,4 +118,12 @@ public:
 			result_vector_array[1]
 		};
 	}
+	
+	Vector2 operator+(const Vector2& right) {
+		return add(right);    
+	}
+
+	Vector2 operator-(const Vector2& right) {
+		return subtract(right);
+	}
 };
