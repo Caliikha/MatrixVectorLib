@@ -297,6 +297,14 @@ int main()
 	Matrix2x2::showResult(_Mtrx1_2x2.divide(Mtrx2_2x2)); // If you are wondering about division, it just takes the inverse of the input, and multiplies OBJECT x INVERSE_INPUT
 	Matrix4x4::showResult(_Mtrx1_4x4.add(Mtrx2_4x4)); // just adds the values of the vectors
 	Matrix4x4::showResult(_Mtrx1_4x4.subtract(Mtrx2_4x4)); // simple matrix subtraction
+	
+	// in relation to the past few functions you can use your standard c++ operators to call certain functions, for example
+	Matrix4x4 result; // matrix to hold the result of the next few operations
+	result = _Mtrx1_4x4 * Mtrx2_4x4; // this acts the same as result = _Mtrx1_4x4.multiply(Mtrx2_4x4);
+	result = _Mtrx1_4x4 + Mtrx2_4x4; // acts the same as result = _Mtrx1_4x4.add(Mtrx2_4x4);
+	result = _Mtrx1_4x4 - Mtrx2_4x4; // acts the same as result = _Mtrx1_4x4.subtract(Mtrx2_4x4);
+	// you can also use division but only for Matrix2x2 for now since the inverse() functoin is not ready yet for 3x3 and 4x4 matricies    
+	_Mtrx1_2x2 / Mtrx2_2x2; // acts the same as _Mtrx1_2x2.divide(Mtrx2_2x2);
 
 	//			You can repeat all of these operations with the 2x2, 3x3, or 4x4  matrix libarary, i will not list them here as it is just a showcase
     	//			Keep in mind that there are a few functions that are not yet developed in the 3x3 and 4x4 classes, such as determinant() or inverse()	
