@@ -130,4 +130,15 @@ public:
 		return resultMtrx;
 	}
 
+	Matrix4x4 operator*(const Matrix4x4& right) {
+		return multiply(right);    
+	}
+
+	Matrix4x4 operator+(const Matrix4x4& right) {
+		return add(right);    
+	}
+
+	Matrix4x4 operator-(const Matrix4x4& right) {
+		return subtract(right);
+	}
 };
