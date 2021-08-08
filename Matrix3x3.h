@@ -144,4 +144,16 @@ public:
 
 		return resultMtrx;
 	}
+	
+	Matrix3x3 operator*(const Matrix3x3& right) {
+		return multiply(right);    
+	}
+
+	Matrix3x3 operator+(const Matrix3x3& right) {
+		return add(right);    
+	}
+
+	Matrix3x3 operator-(const Matrix3x3& right) {
+		return subtract(right);
+	}
 };
