@@ -439,4 +439,16 @@ public:
 	Vector4 operator-(const Vector4& right) {
 		return subtract(right);
 	}
+	
+	Vector4 operator^(const float power) {
+		if (power == -1) {
+			return inverse();
+		}
+		return {
+			(float)pow(x, power),
+			(float)pow(y, power),
+			(float)pow(z, power),
+			(float)pow(w, power)
+		};
+	}
 };
