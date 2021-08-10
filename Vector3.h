@@ -151,6 +151,10 @@ public:
 			};	    
 	}
 	
+	Vector3 operator*(const Vector3& right) {
+		return crossproduct(right);
+	}
+	
 	Vector3 operator+(const Vector3& right) {
 		return add(right);    
 	}
