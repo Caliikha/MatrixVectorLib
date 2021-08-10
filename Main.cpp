@@ -125,6 +125,16 @@ int main()
 	Vector4::showResult(_Vctr1 - _Vctr1); // the same as result = _Vctr1.subtract(_Vctr1);
 	// keep in mind that the * operator for Vector4 objects can be confusing since there is quaternion multiplication and vector cross product, this might be changed in the future
 
+	// you can also use *= += -= operators on these objects 
+	// however DISCLAIMER! the Vector2 type does not have *= crossproduct equator since the returned value is a Vector3 type, it cannot be converted automatically without the user explicitly equating a V3 with a V2 * V2 line, something like V3 = V2 * V2
+	_Vctr1 += _Vctr1;
+	_Vctr1.printvector(); // the same as _Vctr1 = _Vctr1.add(_Vctr1);
+	_Vctr1 -= _Vctr1;
+	_Vctr1.printvector(); // the same as _Vctr1 = _Vctr1.subtract(_Vctr1);
+	_Vctr1 *= _Vctr1;
+	_Vctr1.printvector(); // the same as _Vctr1 = _Vctr1.crossproduct(_Vctr1);
+    
+	_Vctr1 = {3, 7, 5, 4}; // reassigned values for ease of reference when testing with online calculators
 	// a standard "power" operation can also be used, with the special case that ^(-1) is interpreted as the inverse of the function
 	// keep in mind that the inverse is only focused on quaternions, not vectors
 	Vector4::showResult(_Vctr1^(3)); // same as taking the power to 3 of all components
