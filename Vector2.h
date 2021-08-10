@@ -127,7 +127,22 @@ public:
 		return add(right);    
 	}
 
+	Vector2& operator+=(const Vector2& right) {
+		Vector2 resultVector = add(right);
+		x = resultVector.x;
+		y = resultVector.y;
+		return *this;
+	}
+	
 	Vector2 operator-(const Vector2& right) {
 		return subtract(right);
 	}
+	
+	Vector2& operator-=(const Vector2& right) {
+		Vector2 resultVector = subtract(right);
+		x = resultVector.x;
+		y = resultVector.y;
+		return *this;
+	}
+
 };
