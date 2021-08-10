@@ -155,11 +155,36 @@ public:
 		return crossproduct(right);
 	}
 	
+	Vector3& operator*=(const Vector3& right) {
+		Vector3 resultVector = crossproduct(right);
+		x = resultVector.x;
+		y = resultVector.y;
+		z = resultVector.z;
+		return *this;
+	}
+	
 	Vector3 operator+(const Vector3& right) {
 		return add(right);    
+	}
+	
+	Vector3& operator+=(const Vector3& right) {
+		Vector3 resultVector = add(right);
+		x = resultVector.x;
+		y = resultVector.y;
+		z = resultVector.z;
+		return *this;
 	}
 
 	Vector3 operator-(const Vector3& right) {
 		return subtract(right);
 	}
+	
+	Vector3& operator-=(const Vector3& right) {
+		Vector3 resultVector = subtract(right);
+		x = resultVector.x;
+		y = resultVector.y;
+		z = resultVector.z;
+		return *this;
+	}
+
 };
