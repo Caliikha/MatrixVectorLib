@@ -432,6 +432,10 @@ public:
 		};
 	}
 	
+	Vector4 operator*(const Vector4& right) {
+		return crossproduct(right);
+	}
+	
 	Vector4 operator+(const Vector4& right) {
 		return add(right);    
 	}
