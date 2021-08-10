@@ -118,11 +118,13 @@ int main()
 	};
 	_Vctr1 = {3, 7, 5, 4}; // reassigned values for ease of reference when testing with online calculators
 	Vector4::showResult(_Vctr1 * ProductMtrx_4x4); // this can also be done for 3D*3x3 and 2D*2x2
-	
+	    
 	// you can also commplete vector addition and subtraction using + and operators
-	Vector4::showResult(_Vctr1 + _Vctr1); // the same as result = _Vctr1 + _Vctr1
-	Vector4::showResult(_Vctr1 - _Vctr1); // the same as result = _Vctr1 - _Vctr1
-	
+	Vector4::showResult(_Vctr1 * _Vctr1); // the same as result = _Vctr1.crossproduct(_Vctr1);
+	Vector4::showResult(_Vctr1 + _Vctr1); // the same as result = _Vctr1.add(_Vctr1);
+	Vector4::showResult(_Vctr1 - _Vctr1); // the same as result = _Vctr1.subtract(_Vctr1);
+	// keep in mind that the * operator for Vector4 objects can be confusing since there is quaternion multiplication and vector cross product, this might be changed in the future
+
 	// a standard "power" operation can also be used, with the special case that ^(-1) is interpreted as the inverse of the function
 	// keep in mind that the inverse is only focused on quaternions, not vectors
 	Vector4::showResult(_Vctr1^(3)); // same as taking the power to 3 of all components
