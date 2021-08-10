@@ -435,13 +435,40 @@ public:
 	Vector4 operator*(const Vector4& right) {
 		return crossproduct(right);
 	}
+	    
+	Vector4& operator*=(const Vector4& right) {
+		Vector4 resultVector = crossproduct(right);
+		x = resultVector.x;
+		y = resultVector.y;
+		z = resultVector.z;
+		w = resultVector.w;
+		return *this;
+	}
 	
 	Vector4 operator+(const Vector4& right) {
 		return add(right);    
 	}
 
+	Vector4& operator+=(const Vector4& right) {
+		Vector4 resultVector = add(right);
+		x = resultVector.x;
+		y = resultVector.y;
+		z = resultVector.z;
+		w = resultVector.w;
+		return *this;
+	}
+	
 	Vector4 operator-(const Vector4& right) {
 		return subtract(right);
+	}
+	
+	Vector4& operator-=(const Vector4& right) {
+		Vector4 resultVector = subtract(right);
+		x = resultVector.x;
+		y = resultVector.y;
+		z = resultVector.z;
+		w = resultVector.w;
+		return *this;
 	}
 	
 	Vector4 operator^(const float power) {
