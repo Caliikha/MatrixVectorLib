@@ -148,12 +148,43 @@ public:
 	Matrix3x3 operator*(const Matrix3x3& right) {
 		return multiply(right);    
 	}
+	
+	Matrix3x3& operator*=(const Matrix3x3& right) {
+		Matrix3x3 resultMtrx = multiply(right);
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				matrix[i][j] = resultMtrx.matrix[i][j];
+			}
+		}
+		return *this;
+	}
 
 	Matrix3x3 operator+(const Matrix3x3& right) {
 		return add(right);    
 	}
+	
+	Matrix3x3& operator+=(const Matrix3x3& right) {
+		Matrix3x3 resultMtrx = add(right);
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				matrix[i][j] = resultMtrx.matrix[i][j];
+			}
+		}
+		return *this;
+	}
 
 	Matrix3x3 operator-(const Matrix3x3& right) {
 		return subtract(right);
+	}
+	
+	Matrix3x3& operator-=(const Matrix3x3& right) {
+
+		Matrix3x3 resultMtrx = subtract(right);
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				matrix[i][j] = resultMtrx.matrix[i][j];
+			}
+		}
+		return *this;
 	}
 };
