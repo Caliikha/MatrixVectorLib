@@ -11,6 +11,20 @@ class Vector4 {
 public:
 	float x = 0, y = 0, z = 0, w = 0;
 
+	template <typename numerictype = float>
+	Vector4& operator<<(const numerictype Real) {
+		static_assert(std::is_same<numerictype, float>::value || std::is_same<numerictype, double>::value || std::is_same<numerictype, int>::value, "'<<' operator should only be used with int, double, or float values for assignment of W/Real");
+		w = Real;
+		return *this;
+	}
+
+	Vector4& operator>>(const Vector3& Vprime) {
+		x = Vprime.x;
+		y = Vprime.y;
+		z = Vprime.z;
+		return *this;
+	}
+	
 	static void input(Vector4 &inputvctr) {
         	std::cin >> inputvctr.x >> inputvctr.y >> inputvctr.z >> inputvctr.w;
 	}
