@@ -337,6 +337,19 @@ int main()
 	// you can also use division but only for Matrix2x2 for now since the inverse() function is not ready yet for 3x3 and 4x4 matricies
 	Matrix2x2::showResult(_Mtrx1_2x2 / Mtrx2_2x2); // acts the same as result = _Mtrx1_2x2.divide(Mtrx2_2x2);
 	
+	// additionally, just like with vectors, you can also use *=, /=, +=, and -= operators on your matricies
+	// keep in mind, that for now only Matrix2x2 objects may use the division operator
+	_Mtrx1_4x4 += Mtrx2_4x4;
+	_Mtrx1_4x4.printmtrx(); // the same as _Mtrx1_4x4 = _Mtrx1_4x4.add(Mtrx2_4x4);
+	_Mtrx1_4x4 -= Mtrx2_4x4;
+	_Mtrx1_4x4.printmtrx(); // the same as _Mtrx1_4x4 = _Mtrx1_4x4.subtract(Mtrx2_4x4);
+	_Mtrx1_4x4 *= Mtrx2_4x4;
+	_Mtrx1_4x4.printmtrx(); // the same as _Mtrx1_4x4 = _Mtrx1_4x4.multiply(Mtrx2_4x4);
+	// and for only Matrix2x2 for now
+	_Mtrx1_2x2 /= Mtrx2_2x2;
+	_Mtrx1_2x2.printmtrx(); // the same as _Mtrx1_2x2 = _Mtrx1_2x2.divide(Mtrx2_2x2);
+
+	
 	//			You can repeat all of these operations with the 2x2, 3x3, or 4x4  matrix libarary, i will not list them here as it is just a showcase
     	//			Keep in mind that there are a few functions that are not yet developed in the 3x3 and 4x4 classes, such as determinant() or inverse()	
 }
