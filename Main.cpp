@@ -187,6 +187,21 @@ int main()
     	// portion. Otherwise, if you WANT to affect the real portion, then you
     	// could model it as a 4D vector and use it just like any other class in
     	// this library
+	
+	// you commonly see the mathematical notation for quaternions to be defined as Q = <Real, Vprime>
+	// the notation above describes the quaternion Q as W = Real and Vprime(3D vector) is assigned to x,y,z
+	// i wanted to include some way to define a Vector4 in a similar manner using operators, but i could only find a weird solution
+	// to assign a Vector4 with a number and Vector3 by default rather than needing to assign each number as {x, y, z, w}, you can use the notation below
+	Vector4 Quaternion_assigned = Quaternion; // just using extra variables to not mess with values of existing objects
+	Vector3 Vprime_3D = NormalVector_3D;
+	Quaternion_assigned<<3>>Vprime_3D; // this is basically like Q = <3, Vprime_3D> where Q = {Vprime_3D.x, Vprime_3D.y, Vprime_3D.z, 3};
+	Quaternion_assigned.printquaternion();
+	Quaternion_assigned<<6>>Vprime_3D;
+	Quaternion_assigned.printquaternion(); // compare these and the only difference will be w/Real changing from 4 to 6
+	// you may also do purely vector assignment without the w/Real value, or w/Real alone without a vector assignment
+	Quaternion_assigned<<9; // << operator for w/Real
+	Quaternion_assigned>>Vprime_3D; // >> operator for Vector3 assignment
+	
     
     	// Vector4::input(Quaternion); // you can use this input function just like other classes   
 
