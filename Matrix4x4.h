@@ -133,12 +133,42 @@ public:
 	Matrix4x4 operator*(const Matrix4x4& right) {
 		return multiply(right);    
 	}
+	
+	Matrix4x4& operator*=(const Matrix4x4& right) {
+		Matrix4x4 resultMtrx = multiply(right);
+		for (int i = 0; i < Rows; i++) {
+			for (int j = 0; j < Cols; j++) {
+				matrix[i][j] = resultMtrx.matrix[i][j];
+			}
+		}
+		return *this;
+	}
 
 	Matrix4x4 operator+(const Matrix4x4& right) {
 		return add(right);    
 	}
+	
+	Matrix4x4& operator+=(const Matrix4x4& right) {
+		Matrix4x4 resultMtrx = add(right);
+		for (int i = 0; i < Rows; i++) {
+			for (int j = 0; j < Cols; j++) {
+				matrix[i][j] = resultMtrx.matrix[i][j];
+			}
+		}
+		return *this;
+	}
 
 	Matrix4x4 operator-(const Matrix4x4& right) {
 		return subtract(right);
+	}
+	
+	Matrix4x4& operator-=(const Matrix4x4& right) {
+		Matrix4x4 resultMtrx = subtract(right);
+		for (int i = 0; i < Rows; i++) {
+			for (int j = 0; j < Cols; j++) {
+				matrix[i][j] = resultMtrx.matrix[i][j];
+			}
+		}
+		return *this;
 	}
 };
