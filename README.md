@@ -7,6 +7,19 @@ If you are interested in breaking things, you can go ahead and test the function
 
 You can take a look at the main.cpp file for a walk-through on what you can do with this library
 
+# How to run
+You will need to compile in a standard no older than C++17 
+
+If you are using a linux terminal. Use the following command:
+
+    g++ -std=c++17 -g -o run Main.cpp ./Vector2.cpp ./Vector3.cpp ./Vector4.cpp ./Matrix2x2.cpp ./Matrix3x3.cpp ./Matrix4x4.cpp && ./run && rm run 
+
+If you are using a separate IDE (e.g Visual Studio). Follow these steps:
+
+    -> Copy all files to a newly made project folder (where Main.cpp or Source.cpp resides)
+    -> Check all files for possible erros with includes or preprocessor macros, 
+         If errors exist: ~edit accordingly to follow windows directory standard
+    -> Run the program using your own start file
 
 # Known Issues/Bugs
 
