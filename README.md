@@ -13,6 +13,10 @@ You will need to compile in a standard no older than C++17
 If you are using a linux terminal. Use the following command:
 
     g++ -std=c++17 -g -o run Main.cpp ./Vector2.cpp ./Vector3.cpp ./Vector4.cpp ./Matrix2x2.cpp ./Matrix3x3.cpp ./Matrix4x4.cpp && ./run && rm run 
+    
+If the terminal does not run the command, try installing or updating g++
+
+    sudo apt install build-essential
 
 If you are using a separate IDE (e.g Visual Studio). Follow these steps:
 
