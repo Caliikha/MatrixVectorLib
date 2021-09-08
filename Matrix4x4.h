@@ -3,6 +3,8 @@
 #pragma once
 #include <iostream>
 
+class Matrix3x3;
+
 class Matrix4x4 {
 private: // Static Matrix dimensions
 	const static int Rows = 4;
@@ -17,6 +19,12 @@ public: // Matrix 2D array
         	static void showResult(TYPE input) { std::cout << input << '\n'; }
 	static void showResult(Matrix4x4 inputmtrx);
 	static void input(Matrix4x4 inputmtrx);
+	Matrix3x3 minormtrx(int, int);
+	float minor(int, int);
+	Matrix3x3 cofactormtrx(int, int);
+	float cofactor(int, int);
+	float determinant();	
+	Matrix4x4 inverse();
 //	float determinant(); TODO: Complete when 3x3 determinant exists 
 //	Matrix4x4 inverse(); // TODO:Complete when determinant function exists 
 	Matrix4x4 transpose();
