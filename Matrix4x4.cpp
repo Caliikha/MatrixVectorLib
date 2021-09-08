@@ -1,4 +1,6 @@
 #include "Matrix4x4.h"
+#include "Matrix3x3.h"
+#include <cmath>
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342
 
 Matrix4x4 Matrix4x4::identity() {
@@ -42,13 +44,62 @@ void Matrix4x4::input(Matrix4x4 inputmtrx) {
     }
 }
 
-//	float Matrix4x4::determinant() { 
-// TODO: Complete when 3x3 determinant exists, using cofactor method or some dynamic matrix alternative
-//	}
+Matrix3x3 Matrix4x4::minormtrx(int ith_row, int jth_col){
+    Matrix3x3 resultMtrx;
+    
+    int i_2 = 0;
+    for (int i = 0; i < Rows; i++){
+        int j_2 = 0;
+        for (int j = 0; j < Cols; j++){
+            if (i == ith_row || j == jth_col){
+                continue;
+            }
+            else {
+                resultMtrx.matrix[i_2][j_2++] = matrix[i][j];
+                if (j_2 == 3){
+                    i_2++;
+                }
+            }
+        }
+    }
+    
+    return resultMtrx;
+}
 
-//	Matrix4x4 Matrix4x4::inverse() { // not fully developed, incorrect values will be returned
-// TODO:Complete when determinant function exists 
-//	}
+float Matrix4x4::minor(int ith_row, int jth_col){
+    return minormtrx(ith_row, jth_col).determinant();
+}
+
+Matrix3x3 Matrix4x4::cofactormtrx(int ith_row, int jth_col){
+    return minormtrx(ith_row, jth_col).scale(pow(-1, ith_row + jth_col));
+}
+
+float Matrix4x4::cofactor(int ith_row, int jth_col){
+    return pow(-1, ith_row + jth_col) * minormtrx(ith_row, jth_col).determinant();
+}
+
+float Matrix4x4::determinant(){
+    float sum = 0;
+    for (int i = 0; i < Cols; i++){
+        sum += matrix[0][i]*cofactor(0, i);
+    }
+    return sum;
+}
+
+Matrix4x4 Matrix4x4::inverse(){
+    if (determinant() == 0){
+        std::cerr << "ERROR: Matrix4x4 inverse() will return undefined value due to determinant = 0" << std::endl;
+    }
+    Matrix4x4 matrix_of_cofactors;
+   
+    for (int i = 0; i < Rows; i++){
+        for (int j = 0; j < Cols; j++){
+            matrix_of_cofactors.matrix[i][j] = cofactor(i, j);
+        }
+    }
+    
+    return matrix_of_cofactors.transpose().scale(1/determinant());
+}
 
 Matrix4x4 Matrix4x4::transpose(){
     Matrix4x4 resultMtrx;
