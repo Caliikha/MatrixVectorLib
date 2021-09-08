@@ -42,27 +42,62 @@ void Matrix3x3::input(Matrix3x3 inputmtrx) {
     }
 }
 
-float Matrix3x3::determinant() { 
-    Matrix2x2 Cofactor_1 = {
-        matrix[1][1], matrix[1][2],
-        matrix[2][1], matrix[2][2]
-    };
-    Matrix2x2 Cofactor_2 = {
-        matrix[1][0], matrix[1][2],
-        matrix[2][0], matrix[2][2]
-    };
-    Matrix2x2 Cofactor_3 = {
-        matrix[1][0], matrix[1][1],
-        matrix[2][0], matrix[2][1]
-    };
-    return (matrix[0][0] * Cofactor_1.determinant()) 
-        - (matrix[0][1] * Cofactor_2.determinant())
-        + (matrix[0][2] * Cofactor_3.determinant());
+Matrix2x2 Matrix3x3::minormtrx(int ith_row, int jth_col) {
+    Matrix2x2 resultMtrx;
+    
+    int i_2 = 0;
+    for (int i = 0; i < Rows; i++){
+        int j_2 = 0;
+        for (int j = 0; j < Cols; j++){
+            if (i == ith_row || j == jth_col){
+                continue;
+            }
+            else {
+                resultMtrx.matrix[i_2][j_2++] = matrix[i][j];
+                if (j_2 == 2){
+                    i_2++;
+                }
+            }
+        }
+    }
+    
+    return resultMtrx;
 }
 
-//	Matrix3x3 Matrix3x3::inverse() { // incorrect mathematics not developed
-// todo: will complete soon after completing determinant() function 
-//	}
+float Matrix3x3::minor(int ith_row, int jth_col){
+    return minormtrx(ith_row, jth_col).determinant();
+}
+
+Matrix2x2 Matrix3x3::cofactormtrx(int ith_row, int jth_col){
+    return minormtrx(ith_row, jth_col).scale(pow(-1, ith_row + jth_col));
+}
+
+float Matrix3x3::cofactor(int ith_row, int jth_col){
+    return pow(-1, ith_row + jth_col) * minormtrx(ith_row, jth_col).determinant();
+}
+
+float Matrix3x3::determinant() { 
+    float sum = 0;
+    for (int i = 0; i < Cols; i++){
+        sum += matrix[0][i]*cofactor(0, i);
+    }
+    return sum;
+}
+
+Matrix3x3 Matrix3x3::inverse() {
+    if (determinant() == 0){
+        std::cerr << "ERROR: Matrix3x3 inverse() will return undefined value due to determinant = 0" << std::endl;
+    }
+    Matrix3x3 matrix_of_cofactors;
+    
+    for (int i = 0; i < Rows; i++){
+        for (int j = 0; j < Cols; j++){
+            matrix_of_cofactors.matrix[i][j] = cofactor(i, j);
+        }
+    }
+    
+    return matrix_of_cofactors.transpose().scale(1/determinant());
+}
 
 Matrix3x3 Matrix3x3::transpose() { 
     Matrix3x3 resultMtrx;
