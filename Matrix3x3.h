@@ -19,8 +19,12 @@ public: // Matrix 2D array
         static void showResult(TYPE input) { std::cout << input << '\n'; }
 	static void showResult(Matrix3x3 inputmtrx);
 	static void input(Matrix3x3 inputmtrx);
+	Matrix3x3 minormtrx(int, int);
+	float minor(int, int);
+	Matrix3x3 cofactormtrx(int, int);
+	float cofactor(int, int);
 	float determinant(); 
-//	Matrix3x3 inverse(); // TODO:Complete when determinant and inverse function exists 
+	Matrix3x3 inverse(); 
 	Matrix3x3 transpose(); 
 	float trace(); 
 	Matrix3x3 scale(float scale);
