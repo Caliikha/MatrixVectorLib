@@ -19,9 +19,9 @@ public: // Matrix 2D array
         static void showResult(TYPE input) { std::cout << input << '\n'; }
 	static void showResult(Matrix3x3 inputmtrx);
 	static void input(Matrix3x3 inputmtrx);
-	Matrix3x3 minormtrx(int, int);
+	Matrix2x2 minormtrx(int, int);
 	float minor(int, int);
-	Matrix3x3 cofactormtrx(int, int);
+	Matrix2x2 cofactormtrx(int, int);
 	float cofactor(int, int);
 	float determinant(); 
 	Matrix3x3 inverse(); 
