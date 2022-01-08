@@ -1,17 +1,30 @@
 #include "Matrix3x3.h"
 #include "Matrix2x2.h"
+#include "../VectorFiles/Vector3.h"
+#include <cmath>
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342
 
-Matrix3x3 Matrix3x3::identity() {
-    Matrix3x3 resultMtrx = {};
-    resultMtrx.matrix[0][0] = 1;
-    resultMtrx.matrix[1][1] = 1;
-    resultMtrx.matrix[2][2] = 1;
-
-    return resultMtrx;
+Matrix3x3::Matrix3x3(
+        const float& a0, const float& a1, const float& a2,
+        const float& a3, const float& a4, const float& a5,
+        const float& a6, const float& a7, const float& a8
+        )
+{
+    this->matrix[0][0] = a0; this->matrix[0][1] = a1; this->matrix[0][2] = a2;
+    this->matrix[1][0] = a3; this->matrix[1][1] = a4; this->matrix[1][2] = a5;
+    this->matrix[2][0] = a6; this->matrix[2][1] = a7; this->matrix[2][2] = a8;
 }
 
-void Matrix3x3::printmtrx() {
+Matrix3x3 Matrix3x3::identity() const {
+    return Matrix3x3
+    {
+        1, 0, 0,
+        0, 1, 0,
+        0, 0, 1
+    };
+}
+
+void Matrix3x3::printmtrx() const {
     for (int i = 0; i < Rows; i++) {
         for (int j = 0; j < Cols; j++) {
             std::cout << matrix[i][j] << ' ';
@@ -24,7 +37,7 @@ void Matrix3x3::printmtrx() {
 //template <typename TYPE> // Templated functions must reside in header file
 //void Matrix3x3::showResult(TYPE input) { std::cout << input << '\n'; }
 
-void Matrix3x3::showResult(Matrix3x3 inputmtrx) {
+void Matrix3x3::showResult(const Matrix3x3& inputmtrx) {
     for (int i = 0; i < Rows; i++) {
         for (int j = 0; j < Cols; j++) {
             std::cout << inputmtrx.matrix[i][j] << ' ';
@@ -34,7 +47,7 @@ void Matrix3x3::showResult(Matrix3x3 inputmtrx) {
     std::cout << '\n';
 }
 
-void Matrix3x3::input(Matrix3x3 inputmtrx) {
+void Matrix3x3::input(Matrix3x3& inputmtrx) {
     for (int i = 0; i < Rows; i++) {
         for (int j = 0; j < Cols; j++) {
             std::cin >> inputmtrx.matrix[i][j];
@@ -42,9 +55,10 @@ void Matrix3x3::input(Matrix3x3 inputmtrx) {
     }
 }
 
-Matrix2x2 Matrix3x3::minormtrx(int ith_row, int jth_col) {
+// TODO YOU WERE HERE OMAAAAAAAAAAR
+// TODO add [gh]
+Matrix2x2 Matrix3x3::minormtrx(const int& ith_row, const int& jth_col) const {
     Matrix2x2 resultMtrx;
-    
     int i_2 = 0;
     for (int i = 0; i < Rows; i++){
         int j_2 = 0;
@@ -60,23 +74,25 @@ Matrix2x2 Matrix3x3::minormtrx(int ith_row, int jth_col) {
             }
         }
     }
-    
     return resultMtrx;
 }
 
-float Matrix3x3::minor(int ith_row, int jth_col){
+// TODO add [gh]
+float Matrix3x3::minor(const int& ith_row, const int& jth_col) const {
     return minormtrx(ith_row, jth_col).determinant();
 }
 
-Matrix2x2 Matrix3x3::cofactormtrx(int ith_row, int jth_col){
+// TODO add [gh]
+Matrix2x2 Matrix3x3::cofactormtrx(const int& ith_row, const int& jth_col) const {
     return minormtrx(ith_row, jth_col).scale(pow(-1, ith_row + jth_col));
 }
 
-float Matrix3x3::cofactor(int ith_row, int jth_col){
+float Matrix3x3::cofactor(const int& ith_row, const int& jth_col) const {
     return pow(-1, ith_row + jth_col) * minormtrx(ith_row, jth_col).determinant();
 }
 
-float Matrix3x3::determinant() { 
+// TODO add [gh]
+float Matrix3x3::determinant() const {
     float sum = 0;
     for (int i = 0; i < Cols; i++){
         sum += matrix[0][i]*cofactor(0, i);
@@ -84,22 +100,24 @@ float Matrix3x3::determinant() {
     return sum;
 }
 
-Matrix3x3 Matrix3x3::inverse() {
-    if (determinant() == 0){
+Matrix3x3 Matrix3x3::inverse() const {
+    if (this->determinant() == 0){
         std::cerr << "ERROR: Matrix3x3 inverse() will return undefined value due to determinant = 0" << std::endl;
     }
     Matrix3x3 matrix_of_cofactors;
-    
     for (int i = 0; i < Rows; i++){
         for (int j = 0; j < Cols; j++){
             matrix_of_cofactors.matrix[i][j] = cofactor(i, j);
         }
     }
-    
     return matrix_of_cofactors.transpose().scale(1/determinant());
 }
 
-Matrix3x3 Matrix3x3::transpose() { 
+//	Matrix3x3 Matrix3x3::inverse() { // incorrect mathematics not developed
+// todo: will complete soon after completing determinant() function 
+//	}
+
+Matrix3x3 Matrix3x3::transpose() const {
     Matrix3x3 resultMtrx;
 
     for (int i = 0; i < Rows; i++) {
@@ -111,11 +129,11 @@ Matrix3x3 Matrix3x3::transpose() {
     return resultMtrx;
 }
 
-float Matrix3x3::trace() { 
+float Matrix3x3::trace() const {
     return (matrix[0][0] + matrix[1][1] + matrix[2][2]);
 }
 
-Matrix3x3 Matrix3x3::scale(float scale) {
+Matrix3x3 Matrix3x3::scale(const float& scale) const {
     Matrix3x3 resultMtrx;
 
     for (int i = 0; i < Rows; i++) {
@@ -127,7 +145,7 @@ Matrix3x3 Matrix3x3::scale(float scale) {
     return resultMtrx;
 }
 
-Matrix3x3 Matrix3x3::multiply(Matrix3x3 inputmtrx) {
+Matrix3x3 Matrix3x3::multiply(const Matrix3x3& inputmtrx) const {
     Matrix3x3 resultMtrx = {};
 
     for (int i = 0; i < Rows; i++){
@@ -147,7 +165,7 @@ Matrix3x3 Matrix3x3::multiply(Matrix3x3 inputmtrx) {
 //      return multiply(inputmtrx.inverse());
 //    }
 
-Matrix3x3 Matrix3x3::add(Matrix3x3 inputmtrx) {
+Matrix3x3 Matrix3x3::add(const Matrix3x3& inputmtrx) const {
     Matrix3x3 resultMtrx;
     for (int i = 0; i < Rows; i++) {
         for (int j = 0; j < Cols; j++) {
@@ -158,8 +176,8 @@ Matrix3x3 Matrix3x3::add(Matrix3x3 inputmtrx) {
     return resultMtrx;
 }
 
-Matrix3x3 Matrix3x3::subtract(Matrix3x3 inputmtrx) {
-    Matrix3x3 resultMtrx = { };
+Matrix3x3 Matrix3x3::subtract(const Matrix3x3& inputmtrx) const {
+    Matrix3x3 resultMtrx;
 
     for (int i = 0; i < Rows; i++) {
         for (int j = 0; j < Cols; j++) {
@@ -170,12 +188,12 @@ Matrix3x3 Matrix3x3::subtract(Matrix3x3 inputmtrx) {
     return resultMtrx;
 }
 
-Matrix3x3 Matrix3x3::operator*(const Matrix3x3& right) {
-    return multiply(right);
+Matrix3x3 Matrix3x3::operator*(const Matrix3x3& right) const {
+    return this->multiply(right);
 }
 
 Matrix3x3& Matrix3x3::operator*=(const Matrix3x3& right) {
-    Matrix3x3 resultMtrx = multiply(right);
+    Matrix3x3 resultMtrx = this->multiply(right);
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             matrix[i][j] = resultMtrx.matrix[i][j];
@@ -184,12 +202,12 @@ Matrix3x3& Matrix3x3::operator*=(const Matrix3x3& right) {
     return *this;
 }
 
-Matrix3x3 Matrix3x3::operator+(const Matrix3x3& right) {
-    return add(right);
+Matrix3x3 Matrix3x3::operator+(const Matrix3x3& right) const {
+    return this->add(right);
 }
 
 Matrix3x3& Matrix3x3::operator+=(const Matrix3x3& right) {
-    Matrix3x3 resultMtrx = add(right);
+    Matrix3x3 resultMtrx = this->add(right);
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             matrix[i][j] = resultMtrx.matrix[i][j];
@@ -198,16 +216,20 @@ Matrix3x3& Matrix3x3::operator+=(const Matrix3x3& right) {
     return *this;
 }
 
-Matrix3x3 Matrix3x3::operator-(const Matrix3x3& right) {
-    return subtract(right);
+Matrix3x3 Matrix3x3::operator-(const Matrix3x3& right) const {
+    return this->subtract(right);
 }
 
 Matrix3x3& Matrix3x3::operator-=(const Matrix3x3& right) {
-    Matrix3x3 resultMtrx = subtract(right);
+    Matrix3x3 resultMtrx = this->subtract(right);
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             matrix[i][j] = resultMtrx.matrix[i][j];
         }
     }
     return *this;
+}
+
+const float* Matrix3x3::operator[](const int& index) const {
+    return this->matrix[index];
 }

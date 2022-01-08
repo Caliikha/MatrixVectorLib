@@ -1,13 +1,23 @@
 #include "Matrix2x2.h"
 
-Matrix2x2 Matrix2x2::identity() {
-    Matrix2x2 resultMtrx = {};
-    resultMtrx.matrix[0][0] = 1;
-    resultMtrx.matrix[1][1] = 1;
-    return resultMtrx;
+Matrix2x2::Matrix2x2(
+        const float& a0, const float& a1, 
+        const float& a2, const float& a3
+        )
+{
+    this->matrix[0][0] = a0; this->matrix[0][1] = a1;
+    this->matrix[1][0] = a2; this->matrix[1][1] = a3;
 }
 
-void Matrix2x2::printmtrx() {
+Matrix2x2 Matrix2x2::identity() const {
+    return Matrix2x2
+    {
+        0, 1, 
+        1, 0
+    };
+}
+
+void Matrix2x2::printmtrx() const {
     for (int i = 0; i < Rows; i++) {
         for (int j = 0; j < Cols; j++) {
             std::cout << matrix[i][j] << ' ';
@@ -20,7 +30,7 @@ void Matrix2x2::printmtrx() {
 //template <typename TYPE> // templated functions must reside in header file
 //void Matrix2x2::showResult(TYPE input) { std::cout << input << '\n'; }
 
-void Matrix2x2::showResult(Matrix2x2 inputmtrx) {
+void Matrix2x2::showResult(const Matrix2x2& inputmtrx) {
     for (int i = 0; i < Rows; i++) {
         for (int j = 0; j < Cols; j++) {
             std::cout << inputmtrx.matrix[i][j] << ' ';
@@ -30,7 +40,7 @@ void Matrix2x2::showResult(Matrix2x2 inputmtrx) {
     std::cout << '\n';
 }
 
-void Matrix2x2::input(Matrix2x2 inputmtrx) {
+void Matrix2x2::input(Matrix2x2& inputmtrx) {
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
             std::cin >> inputmtrx.matrix[i][j];
@@ -38,23 +48,20 @@ void Matrix2x2::input(Matrix2x2 inputmtrx) {
     }
 }
 
-float Matrix2x2::determinant() {
+float Matrix2x2::determinant() const {
     return ((matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]));
 }
 
-Matrix2x2 Matrix2x2::inverse() {
-    Matrix2x2 InvMat;
-    float Const = 1 / determinant();
-
-    InvMat.matrix[0][0] = { Const * matrix[1][1] };
-    InvMat.matrix[0][1] = { Const * -matrix[0][1] };
-    InvMat.matrix[1][0] = { Const * -matrix[1][0] };
-    InvMat.matrix[1][1] = { Const * matrix[0][0] };
-
-    return InvMat;
+Matrix2x2 Matrix2x2::inverse() const {
+    float Constant = 1 / determinant();
+    return Matrix2x2
+    {
+        Constant * matrix[1][1], Constant * -matrix[0][1],
+        Constant * -matrix[1][0], Constant * matrix[0][0] 
+    };
 }
 
-Matrix2x2 Matrix2x2::transpose() {
+Matrix2x2 Matrix2x2::transpose() const {
     Matrix2x2 resultMtrx;
 
     for (int i = 0; i < Rows; i++){
@@ -66,11 +73,11 @@ Matrix2x2 Matrix2x2::transpose() {
     return resultMtrx;
 }
 
-float Matrix2x2::trace() {
+float Matrix2x2::trace() const {
     return (matrix[0][0] + matrix[1][1]);
 }
 
-Matrix2x2 Matrix2x2::scale(float scale) {
+Matrix2x2 Matrix2x2::scale(const float& scale) const {
     Matrix2x2 resultMtrx;
 
     for (int i = 0; i < Rows; i++) {
@@ -82,7 +89,7 @@ Matrix2x2 Matrix2x2::scale(float scale) {
     return resultMtrx;
 }
 
-Matrix2x2 Matrix2x2::multiply(Matrix2x2 inputmtrx) {
+Matrix2x2 Matrix2x2::multiply(const Matrix2x2& inputmtrx) const {
     Matrix2x2 resultMtrx = {};
 
     for (int i = 0; i < Rows; i++){
@@ -96,12 +103,12 @@ Matrix2x2 Matrix2x2::multiply(Matrix2x2 inputmtrx) {
     return resultMtrx;
 }
 
-Matrix2x2 Matrix2x2::divide(Matrix2x2 inputmtrx) {
+Matrix2x2 Matrix2x2::divide(const Matrix2x2& inputmtrx) const {
     return multiply(inputmtrx.inverse());
 }
 
-Matrix2x2 Matrix2x2::add(Matrix2x2 inputmtrx) {
-    Matrix2x2 resultMtrx = { };
+Matrix2x2 Matrix2x2::add(const Matrix2x2& inputmtrx) const {
+    Matrix2x2 resultMtrx;
 
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
@@ -112,8 +119,8 @@ Matrix2x2 Matrix2x2::add(Matrix2x2 inputmtrx) {
     return resultMtrx;
 }
 
-Matrix2x2 Matrix2x2::subtract(Matrix2x2 inputmtrx) {
-    Matrix2x2 resultMtrx = { };
+Matrix2x2 Matrix2x2::subtract(const Matrix2x2& inputmtrx) const {
+    Matrix2x2 resultMtrx;
 
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
@@ -124,58 +131,38 @@ Matrix2x2 Matrix2x2::subtract(Matrix2x2 inputmtrx) {
     return resultMtrx;
 }
 
-Matrix2x2 Matrix2x2::operator*(const Matrix2x2& right) {
-    return multiply(right);
+Matrix2x2 Matrix2x2::operator*(const Matrix2x2& right) const {
+    return this->multiply(right);
 }
 
 Matrix2x2& Matrix2x2::operator*=(const Matrix2x2& right) {
-    Matrix2x2 resultMtrx = multiply(right);
-    for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < 2; j++) {
-            matrix[i][j] = resultMtrx.matrix[i][j];
-        }
-    }
-    return *this;
+    return *this = this->multiply(right);
 }
 
-Matrix2x2 Matrix2x2::operator/(const Matrix2x2& right) {
-    return divide(right);
+Matrix2x2 Matrix2x2::operator/(const Matrix2x2& right) const {
+    return this->divide(right);
 }
 
 Matrix2x2& Matrix2x2::operator/=(const Matrix2x2& right) {
-    Matrix2x2 resultMtrx = divide(right);
-    for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < 2; j++) {
-            matrix[i][j] = resultMtrx.matrix[i][j];
-        }
-    }
-    return *this;
+    return *this = this->divide(right);
 }
 
-Matrix2x2 Matrix2x2::operator+(const Matrix2x2& right) {
-    return add(right);
+Matrix2x2 Matrix2x2::operator+(const Matrix2x2& right) const {
+    return this->add(right);
 }
 
 Matrix2x2& Matrix2x2::operator+=(const Matrix2x2& right) {
-    Matrix2x2 resultMtrx = add(right);
-    for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < 2; j++) {
-            matrix[i][j] = resultMtrx.matrix[i][j];
-        }
-    }
-    return *this;
+    return *this = this->add(right);
 }
 
-Matrix2x2 Matrix2x2::operator-(const Matrix2x2& right) {
-    return subtract(right);
+Matrix2x2 Matrix2x2::operator-(const Matrix2x2& right) const {
+    return this->subtract(right);
 }
 
 Matrix2x2& Matrix2x2::operator-=(const Matrix2x2& right) {
-    Matrix2x2 resultMtrx = subtract(right);
-    for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < 2; j++) {
-            matrix[i][j] = resultMtrx.matrix[i][j];
-        }
-    }
-    return *this;
+    return *this = this->subtract(right);
+}
+
+const float* Matrix2x2::operator[](const int& index) const {
+    return this->matrix[index];
 }

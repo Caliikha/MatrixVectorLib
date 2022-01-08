@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Vector4.h"
 #include "Vector3.h"
+#include "Vector2.h"
 #include "../MatrixFiles/Matrix4x4.h"
 #include "../MatrixFiles/Matrix3x3.h"
 #include <cmath>
@@ -13,16 +14,16 @@
 
 class Quaternion : public Vector4 {
 public:
-    Quaternion() = default;
-    Quaternion(const float a, const float b, const float c, const float d) : Vector4(a, b, c, d) {};
-    Quaternion(const float a, const float b, const float c) : Vector4(a, b, c) {};
-    Quaternion(const float a, const float b) : Vector4(a, b) {};
-    Quaternion(const float a) : Vector4(a) {};
+    Quaternion(const float& a = 0, const float& b = 0, const float& c = 0, const float& d = 0) : Vector4(a, b, c, d) {};
     Quaternion(const Vector4& Vector_4D) : Quaternion(Vector_4D.x, Vector_4D.y, Vector_4D.z, Vector_4D.w) {};
+    Quaternion(const Vector3& Vector_3D) : Quaternion(Vector_3D.x, Vector_3D.y, Vector_3D.z) {};
+    Quaternion(const float& a, const Vector3& Vector_3D) : Quaternion(Vector_3D.x, Vector_3D.y, Vector_3D.z, a) {}
+    Quaternion(const Vector3& Vector_3D, const float& a) : Quaternion(Vector_3D.x, Vector_3D.y, Vector_3D.z, a) {}
 
     template <typename numerictype = float>
-    Quaternion& operator<<(const numerictype Real) {
-        static_assert(std::is_same<numerictype, float>::value 
+    inline constexpr Quaternion& operator<<(const numerictype& Real) {
+        static_assert(
+                   std::is_same<numerictype, float>::value 
                 || std::is_same<numerictype, double>::value 
                 || std::is_same<numerictype, int>::value, 
                 "'<<' operator should only be used with [int], [double], or [float] values for assignment of W/Real");
@@ -31,15 +32,15 @@ public:
         return *this;
     }
 
-    Quaternion& operator<<(const Vector4& Vprime) { return *this = {Vprime.x, Vprime.y, Vprime.z, Vprime.w}; }
+    inline Quaternion& operator<<(const Vector4& Vprime) { return *this = {Vprime.x, Vprime.y, Vprime.z, Vprime.w}; }
     
-    Quaternion& operator<<(const Vector3& Vprime) { return *this = {Vprime.x, Vprime.y, Vprime.z, w}; }
+    inline Quaternion& operator<<(const Vector3& Vprime) { return *this = {Vprime.x, Vprime.y, Vprime.z, w}; }
 
-    static void input(Vector4 &inputvctr) { 
+    inline static void input(Vector4 &inputvctr) {
         std::cin >> inputvctr.x >> inputvctr.y >> inputvctr.z >> inputvctr.w;
     }
 
-    void printquaternion() {
+    inline void printquaternion() const noexcept {
         std::cout << '[' << w;
         if (x >= 0) { std::cout << " + " << x << 'i'; }
         else { std::cout << " - " << -x << 'i'; }
@@ -52,21 +53,20 @@ public:
         std::cout << ']' << std::endl;
     }
 
-    template <typename TYPE>
-    static void showResult(TYPE input) {
-        std::cout << input << '\n';
-    }
+//    template <class TYPE> this function breaks everything
+//    static void showResult(TYPE input) noexcept {
+//        std::cout << input << '\n';
+//    }
 
     // TODO: check if you can allow to be templated function for quat obj to be printed as Vec4 or Quat
-    static void showResult(Quaternion inputquat) {
+    inline static void showResult(Quaternion& inputquat) noexcept {
         inputquat.printquaternion();
     }
 
-    static void showResult(Vector4 inputvctr) {
+    inline static void showResult(const Vector4& inputvctr) noexcept {
         Vector4::showResult(inputvctr);
     }
 
-    // Ready for GitHub
     template <typename objtype>
     float dotproduct(objtype inputvctr) {
         static_assert(std::is_same<objtype, Quaternion>::value
@@ -111,23 +111,49 @@ public:
         }
     }
 
-    // Ready for GitHub
+    template <class objtype = Vector4>
+    inline constexpr float magnitude() const noexcept {
+        constexpr const bool is_4D = std::is_same<objtype, Quaternion>::value
+                                  || std::is_same<objtype, Vector4>::value;
+        constexpr const bool is_3D = std::is_same<objtype, Vector3>::value;
+        constexpr const bool is_2D = std::is_same<objtype, Vector2>::value;
+        static_assert(
+                is_4D || is_3D || is_2D,
+                "\nERROR: float magnitude<ARG>() template argument must be <Quaternion>[default], <Vector4>, <Vector3>, or <Vector2> specification\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib/");
+
+        if constexpr (is_4D) {
+            return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2) + pow(w, 2));
+        }
+        else if constexpr (is_3D) {
+            return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
+        }
+        else if constexpr (is_2D) {
+            return sqrt(pow(x, 2) + pow(y, w));
+        }
+        else {
+            std::cerr << "ERROR: float magnitude<ARG>() template argument must be <Quaternion>[default], <Vector4>, or <Vector3> specification\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib/" << std::endl;
+            return INT_MIN;
+        }
+    }
+
     template <typename objtype>
-    float angle(objtype inputobj) {
-        static_assert(std::is_same<objtype, Quaternion>::value
-                || std::is_same<objtype, Vector4>::value 
-                || std::is_same<objtype, Vector3>::value, 
+    inline constexpr float angle(const objtype& inputobj) const noexcept {
+        constexpr const bool is_4D = std::is_same<objtype, Quaternion>::value
+                                  || std::is_same<objtype, Vector4>::value;
+        constexpr const bool is_3D = std::is_same<objtype, Vector3>::value;
+        constexpr const bool is_2D = std::is_same<objtype, Vector2>::value;
+        static_assert(
+                is_4D || is_3D || is_2D,
                 "\nERROR: float angle<ARG>(ARG) function argument must be a Quaternion, Vector4, or Vector3 object\nwith <Quaternion>[default], <Vector4>, or <Vector3> template argument specifications for Quaternion function argument inputs\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib/");
 
-        if constexpr (std::is_same<objtype, Quaternion>::value || std::is_same<objtype, Vector4>::value){
-            float Product = dotproduct(inputobj);
-            float Magnitude = magnitude() * inputobj.magnitude();
-            return acos(Product / Magnitude) * (180 / PI);
+        if constexpr (is_4D){
+            return acos(this->dotproduct<Vector4>(inputobj) / this->magnitude<Vector4>() * inputobj.magnitude());
         }
-        else if constexpr (std::is_same<objtype, Vector3>::value) {
-            float Product = dotproduct<Vector3>(inputobj);
-            float Magnitude = magnitude<Vector3>() * inputobj.magnitude(); 
-            return acos(Product / Magnitude) * (180 / PI);
+        else if constexpr (is_3D) {
+            return acos(this->dotproduct<Vector3>(inputobj) / this->magnitude<Vector2>() * inputobj.magnitude());
+        }
+        else if constexpr (is_2D) {
+            return acos(this->dotproduct<Vector2>(inputobj) / (this->magnitude<Vector2>() * inputobj.magnitude())) * (180 / PI);
         }
         else {
             std::cerr << "ERROR: float angle<ARG>(ARG) function argument must be a Quaternion, Vector4, or Vector3 object\nwith <Quaternion>[default], <Vector4>, or <Vector3> template argument specifications for Quaternion function argument inputs\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib/" << std::endl;
@@ -135,30 +161,40 @@ public:
         }
     }
 
-    // Ready for GitHub
     template <typename objtype>
-    Vector4 unitvector() { 
-        Vector4 resultVector;
-        static_assert(std::is_same<objtype, Quaternion>::value
-                || std::is_same<objtype, Vector4>::value 
-                || std::is_same<objtype, Vector3>::value, 
+    inline constexpr Vector4 unitvector() const noexcept {
+        constexpr const bool is_4D = std::is_same<objtype, Quaternion>::value
+                                  || std::is_same<objtype, Vector4>::value;
+        constexpr const bool is_3D = std::is_same<objtype, Vector3>::value;
+        constexpr const bool is_2D = std::is_same<objtype, Vector2>::value;
+        static_assert(
+                is_4D || is_3D || is_2D,
                 "ERROR: Vector4 unitvector<ARG>() template argument must be explicitly defined\nwith <Quaternion>, <Vector4>, or <Vector3> argument specification\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib");
 
-        if constexpr (std::is_same<objtype, Quaternion>::value || std::is_same<objtype, Vector4>::value) {
-            float denominator = magnitude();
-            return resultVector = {
+        if constexpr (is_4D) {
+            const float denominator = this->magnitude();
+            return Vector4 {
                 x/denominator,
                 y/denominator,
                 z/denominator,
                 w/denominator
             };
         }
-        else if constexpr (std::is_same<objtype, Vector3>::value) {
-            float denominator = magnitude<Vector3>();
-            return resultVector = {
+        else if constexpr (is_3D) {
+            const float denominator = this->magnitude<Vector3>();
+            return Vector4 {
                 x/denominator,
                 y/denominator,
                 z/denominator,
+                w
+            };
+        }
+        else if constexpr (is_2D) {
+            const float denominator = this->magnitude<Vector2>();
+            return Vector4 {
+                x/denominator,
+                y/denominator,
+                z,
                 w
             };
         }
@@ -168,200 +204,295 @@ public:
         }
     }
 
-    // Ready for GitHub
-    Quaternion unitquaternion() { 
+    inline Quaternion unitquaternion() const noexcept {
         return unitvector<Vector4>();
     }
 
-    // Ready for GitHub
-    Quaternion conjugate(){
+    inline Quaternion conjugate() const noexcept {
         return {-x, -y, -z, w};
     }
 
-    // Ready for GitHub
     template <typename objtype = Vector4>
-    Quaternion inverse() { 
-        Quaternion resultQuaternion;
-        static_assert(std::is_same<objtype, Quaternion>::value
-                || std::is_same<objtype, Vector4>::value 
-                || std::is_same<objtype, Vector3>::value, 
+    inline constexpr Quaternion inverse() const noexcept {
+        constexpr const bool is_4D = std::is_same<objtype, Quaternion>::value
+                                  || std::is_same<objtype, Vector4>::value;
+        constexpr const bool is_3D = std::is_same<objtype, Vector3>::value;
+        constexpr const bool is_2D = std::is_same<objtype, Vector2>::value;
+        static_assert(
+                is_4D || is_3D || is_2D,
                 "ERROR: Quaternion inverse<ARG>() template arguments must be <Quaternion>[default], <Vector4> or <Vector3> specification\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib/");
 
-        float denominator = pow(magnitude(), 2);
-
-        if constexpr (std::is_same<objtype, Quaternion>::value || std::is_same<objtype, Vector4>::value){
-            return resultQuaternion = {
+        float denominator = (x*x) + (y*y) + (z*z) + (w*w);
+        if constexpr (is_4D) {
+            return Quaternion {
                 -x/denominator,
                 -y/denominator,
                 -z/denominator,
                 w/denominator
             };
         }
-        else if constexpr (std::is_same<objtype, Vector3>::value) {
-            return resultQuaternion = {
+        else if constexpr (is_3D) {
+            return Quaternion {
                 -x/denominator,
                 -y/denominator,
                 -z/denominator,
                 w
             };
         }
+        else if constexpr (is_2D) {
+            return Quaternion {
+                -x/denominator,
+                -y/denominator,
+                -z,
+                w
+            };
+        }
         else {
             std::cerr << "ERROR: Quaternion inverse<ARG>() template arguments must be <Quaternion>[default], <Vector4> or <Vector3> specification\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib/" << std::endl;
-            return resultQuaternion = {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
+            return {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
         }
     }
 
-    // Ready for GitHub
     template <typename objtype>
-    Quaternion resultant(objtype inputvctr) {
-        Quaternion resultVector;
-        static_assert(std::is_same<objtype, Quaternion>::value
-                || std::is_same<objtype, Vector4>::value 
-                || std::is_same<objtype, Vector3>::value, 
+    inline constexpr Quaternion resultant(const objtype& inputvctr) const noexcept {
+        constexpr const bool is_4D = std::is_same<objtype, Quaternion>::value
+                                  || std::is_same<objtype, Vector4>::value;
+        constexpr const bool is_3D = std::is_same<objtype, Vector3>::value;
+        constexpr const bool is_2D = std::is_same<objtype, Vector2>::value;
+        static_assert(
+                is_4D || is_3D || is_2D,
                 "ERROR: Quaternion resultant<ARG>(ARG) function argument must be a Quaternion, Vector4, or Vector3 object\nwith <Vector4>[default] or <Vector3> template argument specification for Quaternion function argument\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib/");
 
-        if constexpr (std::is_same<objtype, Quaternion>::value || std::is_same<objtype, Vector4>::value){
-            return resultVector = {
+        if constexpr (is_4D) {
+            return Quaternion {
                 x + inputvctr.x,
                 y + inputvctr.y,
                 z + inputvctr.z,
                 w + inputvctr.w
             };
         }
-        else if constexpr (std::is_same<objtype, Vector3>::value){
-            return resultVector = {
+        else if constexpr (is_3D) {
+            return Quaternion {
                 x + inputvctr.x,
                 y + inputvctr.y,
                 z + inputvctr.z,
+                w
+            };
+        }
+        else if constexpr (is_2D) {
+            return Quaternion {
+                x + inputvctr.x,
+                y + inputvctr.y,
+                z,
                 w
             };
         }
         else {
             std::cerr << "ERROR: Quaternion resultant<ARG>(ARG) function argument must be a Quaternion, Vector4, or Vector3 object\nwith <Vector4>[default] or <Vector3> template argument specification for Quaternion function argument\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib/" << std::endl;
-            return resultVector = {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
+            return {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
         }
     }
 
-    // Ready for GitHub
     template <typename objtype>
-    Quaternion add(objtype inputvctr) {
-        Quaternion resultVector;
-        static_assert(std::is_same<objtype, Quaternion>::value
-                || std::is_same<objtype, Vector4>::value 
-                || std::is_same<objtype, Vector3>::value, 
+    inline constexpr Quaternion add(const objtype& inputvctr) const noexcept {
+        constexpr const bool is_4D = std::is_same<objtype, Quaternion>::value
+                                  || std::is_same<objtype, Vector4>::value;
+        constexpr const bool is_3D = std::is_same<objtype, Vector3>::value;
+        constexpr const bool is_2D = std::is_same<objtype, Vector2>::value;
+        static_assert(
+                is_4D || is_3D || is_2D,
                 "ERROR: Quaternion add<ARG>(ARG) function argument must be a Quaternion, Vector4, or Vector3 object type\nwith <Quaternion>, <Vector4>, or <Vector3> template argument specification for Quaterinon function argument\nFor reference documentation please visit the Main.cpp file in https:://github.com/Caliikha/MatrixVectorLib/");
 
-        if constexpr (std::is_same<objtype, Quaternion>::value || std::is_same<objtype, Vector4>::value) {
-            return resultVector = {
+        if constexpr (is_4D) {
+            return Quaternion {
                 x + inputvctr.x,
                 y + inputvctr.y,
                 z + inputvctr.z,
                 w + inputvctr.w
             };
         }
-        else if constexpr (std::is_same<objtype, Vector3>::value) {
-            return resultVector = {
+        else if constexpr (is_3D) {
+            return Quaternion {
                 x + inputvctr.x,
                 y + inputvctr.y,
                 z + inputvctr.z,
                 w
             };
         }
+        else if constexpr (is_2D) {
+            return Quaternion {
+                x + inputvctr.x,
+                y + inputvctr.y,
+                z,
+                w
+            };
+        }
         else {
             std::cerr << "ERROR: Quaternion add<ARG>(ARG) function argument must be a Quaternion, Vector4, or Vector3 object type\nwith <Quaternion>, <Vector4>, or <Vector3> template argument specification for Quaterinon function argument\nFor reference documentation please visit the Main.cpp file in https:://github.com/Caliikha/MatrixVectorLib/" << std::endl;
-            return resultVector = {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
+            return {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
         }
     }
 
-    // Ready for GitHub
     template <typename objtype>
-    Quaternion subtract(objtype inputvctr) {
-        Quaternion resultVector;
-        static_assert(std::is_same<objtype, Quaternion>::value
-                || std::is_same<objtype, Vector4>::value 
-                || std::is_same<objtype, Vector3>::value, 
+    inline constexpr Quaternion subtract(const objtype& inputvctr) const noexcept {
+        constexpr const bool is_4D = std::is_same<objtype, Quaternion>::value
+                                  || std::is_same<objtype, Vector4>::value;
+        constexpr const bool is_3D = std::is_same<objtype, Vector3>::value;
+        constexpr const bool is_2D = std::is_same<objtype, Vector2>::value;
+        static_assert(
+                is_4D || is_3D || is_2D,
                 "ERROR: Quaternion subtract<ARG>(ARG) function argument must be a Quaternion, Vector4, or Vector3 object type\nwith <Quaternion>, <Vector4>, or <Vector3> template argument specification for Quaterinon function argument\nFor reference documentation please visit the Main.cpp file in https:://github.com/Caliikha/MatrixVectorLib/");
 
-        if constexpr (std::is_same<objtype, Quaternion>::value || std::is_same<objtype, Vector4>::value) {
-            return resultVector = {
+        if constexpr (is_4D) {
+            return Quaternion {
                 x - inputvctr.x,
                 y - inputvctr.y,
                 z - inputvctr.z,
                 w - inputvctr.w
             };
         }
-        else if constexpr (std::is_same<objtype, Vector3>::value) {
-            return resultVector = {
+        else if constexpr (is_3D) {
+            return Quaternion {
                 x - inputvctr.x,
                 y - inputvctr.y,
                 z - inputvctr.z,
                 w
             };
         }
+        else if constexpr (is_2D) {
+            return Quaternion {
+                x - inputvctr.x,
+                y - inputvctr.y,
+                z,
+                w
+            };
+        }
         else {
             std::cerr << "ERROR: Quaternion subtract<ARG>(ARG) function argument must be a Quaternion, Vector4, or Vector3 object type\nwith <Quaternion>, <Vector4>, or <Vector3> template argument specification for Quaterinon function argument\nFor reference documentation please visit the Main.cpp file in https:://github.com/Caliikha/MatrixVectorLib/" << std::endl;
-            return resultVector = {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
+            return {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
         }
     }
 
-    // Ready for GitHub
     template <class objtype = Vector4>
-    Quaternion scale(float scale) {
-        Quaternion resultVector;
-        static_assert(std::is_same<objtype, Quaternion>::value
-                || std::is_same<objtype, Vector4>::value 
-                || std::is_same<objtype, Vector3>::value, 
+    inline constexpr Quaternion scalef(const float& scale) const noexcept {
+        constexpr const bool is_4D = std::is_same<objtype, Quaternion>::value
+                                  || std::is_same<objtype, Vector4>::value;
+        constexpr const bool is_3D = std::is_same<objtype, Vector3>::value;
+        constexpr const bool is_2D = std::is_same<objtype, Vector2>::value;
+        static_assert(
+                is_4D || is_3D || is_2D,
                 "ERROR: Quaternion scale<ARG>(ARG) function argument only accepts float numeric values, Matrix4x4, or Matrix3x3 objects\nwith <Vector4>[default] or <Vector3> template argument specification with <Vector3> paired with (Matrix3x3) argument or <Vector4> paired with (Matrix4x4) argument\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib/");
 
-        if constexpr (std::is_same<objtype, Vector4>::value){
-            return resultVector = {
+        if constexpr (is_4D) {
+            return Quaternion {
                 x * scale,
                 y * scale,
                 z * scale,
                 w * scale
             };
         }
-        else if constexpr (std::is_same<objtype, Vector3>::value){
-            return resultVector = {
+        else if constexpr (is_3D) {
+            return Quaternion {
                 x * scale,
                 y * scale,
                 z * scale,
                 w
             };
         }
+        else if constexpr (is_2D) {
+            return Quaternion {
+                x * scale,
+                y * scale,
+                z,
+                w
+            };
+        }
         else {
             std::cerr << "ERROR: Quaternion scale<ARG>(ARG) function argument only accepts float numeric values, Matrix4x4, or Matrix3x3 objects\nwith <Vector4>[default] or <Vector3> template argument specification with <Vector3> paired with (Matrix3x3) argument or <Vector4> paired with (Matrix4x4) argument\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib/" << std::endl;
-            return resultVector = {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
+            return Vector4{INT_MIN, INT_MIN, INT_MIN, INT_MIN};
         }
     }
 
-    // Ready for GitHub
-    template <class vectorobj = Vector4, class matrixobj = Matrix4x4>
-    Quaternion scale(matrixobj inputmtrx) {
-        Quaternion resultVector;
-        static_assert(((std::is_same<vectorobj, Quaternion>::value || std::is_same<vectorobj, Vector4>::value) && std::is_same<matrixobj, Matrix4x4>::value) 
-                || (std::is_same<vectorobj, Vector3>::value && std::is_same<matrixobj, Matrix3x3>::value),
+    template <class objtype = Vector4>
+    inline constexpr Quaternion scale(const float& scale) const noexcept {
+        constexpr const bool is_4D = std::is_same<objtype, Quaternion>::value
+                                  || std::is_same<objtype, Vector4>::value;
+        constexpr const bool is_3D = std::is_same<objtype, Vector3>::value;
+        constexpr const bool is_2D = std::is_same<objtype, Vector2>::value;
+        static_assert(
+                is_4D || is_3D || is_2D,
                 "ERROR: Quaternion scale<ARG>(ARG) function argument only accepts float numeric values, Matrix4x4, or Matrix3x3 objects\nwith <Vector4>[default] or <Vector3> template argument specification with <Vector3> paired with (Matrix3x3) argument or <Vector4> paired with (Matrix4x4) argument\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib/");
 
-        if constexpr ((std::is_same<vectorobj, Quaternion>::value || std::is_same<vectorobj, Vector4>::value) && std::is_same<matrixobj, Matrix4x4>::value){
-            return resultVector = {
+        if constexpr (is_4D){
+            return Quaternion {
+                x * scale,
+                y * scale,
+                z * scale,
+                w * scale
+            };
+        }
+        else if constexpr (is_3D){
+            return Quaternion {
+                x * scale,
+                y * scale,
+                z * scale,
+                w
+            };
+        }
+        else if constexpr (is_2D) {
+            return Quaternion {
+                x * scale,
+                y * scale,
+                z,
+                w
+            };
+        }
+        else {
+            std::cerr << "ERROR: Quaternion scale<ARG>(ARG) function argument only accepts float numeric values, Matrix4x4, or Matrix3x3 objects\nwith <Vector4>[default] or <Vector3> template argument specification with <Vector3> paired with (Matrix3x3) argument or <Vector4> paired with (Matrix4x4) argument\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib/" << std::endl;
+            return {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
+        }
+    }
+
+    template <class vectorobj = Vector4, class matrixobj = Matrix4x4>
+    inline constexpr Quaternion scale(const matrixobj& inputmtrx) const noexcept {
+        constexpr const bool is_4D = (std::is_same<vectorobj, Quaternion>::value
+                                  || std::is_same<vectorobj, Vector4>::value)
+                                  && std::is_same<matrixobj, Matrix4x4>::value;
+        constexpr const bool is_3D = std::is_same<vectorobj, Vector3>::value
+                                  && std::is_same<matrixobj, Matrix3x3>::value;
+        constexpr const bool is_2D = std::is_same<vectorobj, Vector2>::value
+                                  && std::is_same<matrixobj, Matrix2x2>::value;
+        static_assert(
+                is_4D || is_3D || is_2D,
+                "ERROR: Quaternion scale<ARG>(ARG) function argument only accepts float numeric values, Matrix4x4, or Matrix3x3 objects\nwith <Vector4>[default] or <Vector3> template argument specification with <Vector3> paired with (Matrix3x3) argument or <Vector4> paired with (Matrix4x4) argument\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib/");
+
+        if constexpr (is_4D){
+            return Quaternion {
                 x * inputmtrx.matrix[0][0],
                 y * inputmtrx.matrix[1][1],
                 z * inputmtrx.matrix[2][2],
                 w * inputmtrx.matrix[3][3]
             };
         }
-        else if constexpr (std::is_same<vectorobj, Vector3>::value && std::is_same<matrixobj, Matrix3x3>::value){
-            return resultVector = {
+        else if constexpr (is_3D){
+            return Quaternion {
                 x * inputmtrx.matrix[0][0],
                 y * inputmtrx.matrix[1][1],
                 z * inputmtrx.matrix[2][2],
                 w
             };
         }
+        else if constexpr (is_2D) {
+            return Quaternion {
+                x * inputmtrx.matrix[0][0],
+                y * inputmtrx.matrix[1][1],
+                z,
+                w
+            };
+        }
         else {
             std::cerr << "ERROR: Quaternion scale<ARG>(ARG) function argument only accepts float numeric values, Matrix4x4, or Matrix3x3 objects\nwith <Vector4>[default] or <Vector3> template argument specification with <Vector3> paired with (Matrix3x3) argument or <Vector4> paired with (Matrix4x4) argument\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib/" << std::endl;
-            return resultVector = {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
+            return {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
         }
     }
 
@@ -391,58 +522,66 @@ public:
     //		return resultVector;
     //	}
 
-    
-    // Ready for GitHub
     template <class vectorobj = Vector4, class matrixobj = Matrix4x4> 
-    Vector4 translate(matrixobj inputmtrx) {
-        Vector4 resultVector;
-        static_assert((std::is_same<vectorobj, Quaternion>::value || std::is_same<vectorobj, Vector4>::value) && std::is_same<matrixobj, Matrix4x4>::value 
-                || std::is_same<vectorobj, Vector3>::value && std::is_same<matrixobj, Matrix3x3>::value, 
+    inline constexpr Vector4 translate(const matrixobj& inputmtrx) const noexcept {
+        constexpr const bool is_4D = (std::is_same<vectorobj, Quaternion>::value
+                                  || std::is_same<vectorobj, Vector4>::value)
+                                  && std::is_same<matrixobj, Matrix4x4>::value;
+        constexpr const bool is_3D = std::is_same<vectorobj, Vector3>::value
+                                  && std::is_same<matrixobj, Matrix3x3>::value;
+        constexpr const bool is_2D = std::is_same<vectorobj, Vector2>::value
+                                  && std::is_same<matrixobj, Matrix2x2>::value;
+        static_assert(
+                is_4D || is_3D || is_2D,
                 "ERROR: Quaternion translate<ARG>(ARG) function argument only accepts Matrix4x4 or Matrix3x3 objects\nwith <Vector4>[default] or <Vector3> template argument specification with <Vector3> paaired with (Matrix3x3) argument or <Vector4> paired with Matrix4x4 argument\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib");
 
-        if constexpr ((std::is_same<vectorobj, Quaternion>::value || std::is_same<vectorobj, Vector4>::value) && std::is_same<matrixobj, Matrix4x4>::value) {
-            return resultVector = {
+        if constexpr (is_4D) {
+            return Quaternion {
                 x + inputmtrx.matrix[0][3],
                 y + inputmtrx.matrix[1][3],
                 z + inputmtrx.matrix[2][3],
                 w + inputmtrx.matrix[3][3]
             };
         }
-        else if constexpr (std::is_same<vectorobj, Vector3>::value && std::is_same<matrixobj, Matrix3x3>::value){
-            return resultVector = {
+        else if constexpr (is_3D) {
+            return Quaternion {
                 x + inputmtrx.matrix[0][2],
                 y + inputmtrx.matrix[1][2],
                 z + inputmtrx.matrix[2][2],
                 w
             };
         }
+        else if constexpr (is_2D) {
+            return Quaternion {
+                x + inputmtrx.matrix[0][2],
+                y + inputmtrx.matrix[1][2],
+                z,
+                w
+            };
+        }
         else {
             std::cerr << "ERROR: Quaternion translate<ARG>(ARG) function argument only accepts Matrix4x4 or Matrix3x3 objects\nwith <Vector4>[default] or <Vector3> template argument specification with <Vector3> paaired with (Matrix3x3) argument or <Vector4> paired with Matrix4x4 argument\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib" << std::endl;
-            return resultVector = {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
+            return {INT_MIN, INT_MIN, INT_MIN, INT_MIN};
         }
     }
 
-    // Ready for GitHub
     template <class objtype = Vector4>
-    Quaternion crossproduct(Quaternion inputquat) {
-        Quaternion resultQuat;
-        static_assert(std::is_same<objtype, Quaternion>::value
-                   || std::is_same<objtype, Vector4>::value
-                   || std::is_same<objtype, Vector3>::value,
+    inline constexpr Quaternion crossproduct(const Quaternion& inputquat) const noexcept {
+        constexpr const bool is_4D = std::is_same<objtype, Quaternion>::value
+                                  || std::is_same<objtype, Vector4>::value;
+        constexpr const bool is_3D = std::is_same<objtype, Vector3>::value;
+        constexpr const bool is_2D = std::is_same<objtype, Vector2>::value;
+        static_assert(
+                is_4D || is_3D || is_2D,
                    "Quaternion crossproduct<ARG>(Quaternion) accepts Quaternion function arguments with a specified <Vector4>[default] or <Vector3> template specification\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib");
-        if constexpr (std::is_same<objtype, Quaternion>::value || std::is_same<objtype, Vector4>::value) {
-            Vector3 Vprime_local = {x, y, z};
-            Vector3 Vprime_input = {inputquat.x, inputquat.y, inputquat.z};
-            Vector3 Vprime_result = Vprime_local.crossproduct(Vprime_input);
-            resultQuat << Vprime_result << w;
-            return resultQuat;
+        if constexpr (is_4D) {
+            return Quaternion { static_cast<Vector3>(*this).crossproduct(static_cast<Vector3>(inputquat))};
         }
-        else if constexpr (std::is_same<objtype, Vector3>::value) {
-            Vector3 Vprime_local = {x, y, z};
-            Vector3 Vprime_input = {inputquat.x, inputquat.y, inputquat.z};
-            Vector3 Vprime_result = Vprime_local.crossproduct(Vprime_input);
-            resultQuat << Vprime_result;
-            return resultQuat;
+        else if constexpr (is_3D) {
+            return Quaternion { static_cast<Vector3>(*this).crossproduct(static_cast<Vector3>(inputquat))};
+        }
+        else if constexpr (is_2D) {
+            return Quaternion {Vector2(x, y).crossproduct(Vector2(inputquat.x, inputquat.y))};
         }
         else {
             std::cerr << "Quaternion crossproduct<ARG>(Quaternion) accepts Quaternion function arguments with a specified <Vector4>[default] or <Vector3> template specification\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib" << std::endl;
@@ -450,62 +589,76 @@ public:
         }
     }
 
-    // Ready for GitHub
     template <class vectordimension = Vector4>
-    vectordimension crossproduct(vectordimension inputvctr) {
-        vectordimension resultVector;
-        static_assert(std::is_same<vectordimension, Vector4>::value 
-                || std::is_same<vectordimension, Vector3>::value, 
+    inline constexpr vectordimension crossproduct(const vectordimension& inputvctr) const noexcept {
+        constexpr const bool is_4D = std::is_same<vectordimension, Vector4>::value;
+        constexpr const bool is_3D = std::is_same<vectordimension, Vector3>::value;
+        constexpr const bool is_2D = std::is_same<vectordimension, Vector2>::value;
+        static_assert(
+                is_4D || is_3D || is_2D,
                 "Quaternion crossproduct<ARG>(ARG) accepts (Quaternion), (Vector4), or (Vector3) function arguments with a specified <Vector4>[default] or <Vector3> template specification\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib");
 
-        if constexpr (std::is_same<vectordimension, Vector4>::value) {
+        if constexpr (is_4D) {
             Vector3 Vprime_local = {x, y, z};
             Vector3 Vprime_input = {inputvctr.x, inputvctr.y, inputvctr.z};
             Vector3 Vprime_result = Vprime_local.crossproduct(Vprime_input);
-            return resultVector = {Vprime_result.x, Vprime_result.y, Vprime_result.z, w};
+            return vectordimension {Vprime_result.x, Vprime_result.y, Vprime_result.z, w};
         }
-        else if constexpr (std::is_same<vectordimension, Vector3>::value) {
+        else if constexpr (is_3D) {
             Vector3 quaternionVector_local = {x, y, z};
-            return resultVector = quaternionVector_local.crossproduct(inputvctr);
+            return quaternionVector_local.crossproduct(inputvctr);
+        }
+        else if constexpr (is_2D) {
+            Vector2 quaternionVector_local = {x, y};
+            return quaternionVector_local.crossproduct(inputvctr);
         }
         else {
             std::cerr << "input_vector_type crossproduct<ARG>(ARG) accepts (Quaternion), (Vector4), or (Vector3) function arguments with a specified <Vector4>[default] or <Vector3> template specification\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib" << std::endl;
-            return resultVector = {INT_MIN, INT_MIN, INT_MIN};
+            return {INT_MIN, INT_MIN, INT_MIN};
         }
     }
 
-    // Ready for GitHub
     template <class vectordimension = Vector4>
-    Quaternion multiply(Quaternion inputvctr) { 
-        Quaternion resultVector;
-        static_assert(std::is_same<vectordimension, Quaternion>::value
-                || std::is_same<vectordimension, Vector4>::value 
-                || std::is_same<vectordimension, Vector3>::value, 
+    inline constexpr Quaternion multiply(const Quaternion& inputvctr) const noexcept {
+        constexpr const bool is_4D = std::is_same<vectordimension, Quaternion>::value
+                                  || std::is_same<vectordimension, Vector4>::value;
+        constexpr const bool is_3D = std::is_same<vectordimension, Vector3>::value;
+        constexpr const bool is_2D = std::is_same<vectordimension, Vector2>::value;
+        static_assert(
+                is_4D || is_3D || is_2D,
                 "Quaternion multiply<ARG>(Quaternion) accepts (Quaternion) as a function argument with a specified <Vector4>[default] or <Vector3> template specification\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib");
 
-        if constexpr (std::is_same<vectordimension, Quaternion>::value || std::is_same<vectordimension, Vector4>::value) {
-            return resultVector = {
+        if constexpr (is_4D) {
+            return Quaternion {
                 w*inputvctr.x + x*inputvctr.w + y*inputvctr.z - z*inputvctr.y,
                 w*inputvctr.y - x*inputvctr.z + y*inputvctr.w + z*inputvctr.x,
                 w*inputvctr.z + x*inputvctr.y - y*inputvctr.x + z*inputvctr.w,
                 w*inputvctr.w - x*inputvctr.x - y*inputvctr.y - z*inputvctr.z
             };
         }
-        else if constexpr (std::is_same<vectordimension, Vector3>::value) {
-            return resultVector = {
+        else if constexpr (is_3D) {
+            return Quaternion {
                 w*inputvctr.x + x*inputvctr.w + y*inputvctr.z - z*inputvctr.y,
                 w*inputvctr.y - x*inputvctr.z + y*inputvctr.w + z*inputvctr.x,
                 w*inputvctr.z + x*inputvctr.y - y*inputvctr.x + z*inputvctr.w,
                 w
             };
         }
+        else if constexpr (is_2D) {
+            return Quaternion {
+                w*inputvctr.x + x*inputvctr.w + y*inputvctr.z - z*inputvctr.y,
+                w*inputvctr.y - x*inputvctr.z + y*inputvctr.w + z*inputvctr.x,
+                z,
+                w
+            };
+        }
         else {
             std::cerr << "Quaternion multiply<ARG>(Quaternion) accepts (Quaternion) as a function argument with a specified <Vector4>[default] or <Vector3> template specification\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib" << std::endl;
-            return resultVector = {INT_MIN, INT_MIN, INT_MIN};
+            return {INT_MIN, INT_MIN, INT_MIN};
         }
     }
 
-    Quaternion operator*(const Matrix4x4& right) { 
+    inline Quaternion operator*(const Matrix4x4& right) const noexcept {
         Quaternion resultVector;
         float local_vector_array[4] = {x, y, z, w};
         float result_vector_array[4] = {0, 0, 0, 0};
@@ -522,46 +675,31 @@ public:
         };
     }
 
-    Quaternion operator*(const Vector4& right) {
+    inline Quaternion operator*(const Vector4& right) const noexcept {
         return crossproduct<Vector4>(right);
     }
 
-    Quaternion& operator*=(const Vector4& right) {
-        Quaternion resultVector = crossproduct<Vector4>(right);
-        x = resultVector.x;
-        y = resultVector.y;
-        z = resultVector.z;
-        w = resultVector.w;
-        return *this;
+    inline Quaternion& operator*=(const Vector4& right) noexcept {
+        return *this = crossproduct<Vector4>(right);
     }
 
-    Quaternion operator+(const Vector4& right) {
+    inline Quaternion operator+(const Vector4& right) const noexcept {
         return add<Quaternion>(right);
     }
 
-    Quaternion& operator+=(const Vector4& right) {
-        Vector4 resultVector = add<Quaternion>(right);
-        x = resultVector.x;
-        y = resultVector.y;
-        z = resultVector.z;
-        w = resultVector.w;
-        return *this;
+    inline Quaternion& operator+=(const Vector4& right) noexcept {
+        return *this = add<Quaternion>(right);
     }
 
-    Quaternion operator-(const Vector4& right) {
+    inline Quaternion operator-(const Vector4& right) const noexcept {
         return subtract<Quaternion>(right);
     }
 
-    Quaternion& operator-=(const Vector4& right) {
-        Quaternion resultVector = subtract<Quaternion>(right);
-        x = resultVector.x;
-        y = resultVector.y;
-        z = resultVector.z;
-        w = resultVector.w;
-        return *this;
+    inline Quaternion& operator-=(const Vector4& right) noexcept {
+        return *this = subtract<Quaternion>(right);
     }
 
-    Quaternion operator^(const float power) {
+    inline Quaternion operator^(const float& power) const noexcept {
         if (power == -1) {
             return inverse();
         }

@@ -1,28 +1,30 @@
 #include "Vector4.h"
 #include "Vector3.h"
-#include "Matrix3x3.h"
-#include "Matrix4x4.h"
+#include "../MatrixFiles/Matrix3x3.h"
+#include "../MatrixFiles/Matrix4x4.h"
 #include <cmath>
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342
 #define INT_MIN -2147483648
 #define INT_MAX  2147483647
 
+Vector4::Vector4(const float& a, const float& b, const float& c, const float& d) : x(a), y(b), z(c), w(d) {};
+
 void Vector4::input(Vector4 &inputvctr) { 
     std::cin >> inputvctr.x >> inputvctr.y >> inputvctr.z >> inputvctr.w;
 }
 
-void Vector4::printvector() {
+void Vector4::printvector() const {
     std::cout << '(' << x << ", " << y << ", " << z << ", " << w << ')' << '\n';
 }
 
 //template <typename TYPE> // Templated function's definitions must reside in the header file
 //void Vector4::showResult(TYPE input) { std::cout << input << '\n'; }
 
-void Vector4::showResult(Vector4 inputvctr) {
+void Vector4::showResult(const Vector4& inputvctr) {
     std::cout << '(' << inputvctr.x << ", " << inputvctr.y << ", " << inputvctr.z << ", " << inputvctr.w << ')' << '\n';
 }
 
-float Vector4::dotproduct(Vector4 inputvctr) {
+float Vector4::dotproduct(const Vector4& inputvctr) const {
     return 
          (x * inputvctr.x) 
         +(y * inputvctr.y) 
@@ -30,7 +32,7 @@ float Vector4::dotproduct(Vector4 inputvctr) {
         +(w * inputvctr.w);
 }
 
-float Vector4::magnitude() {
+float Vector4::magnitude() const {
     return sqrt(
                 pow(x, 2) 
                +pow(y, 2) 
@@ -39,17 +41,15 @@ float Vector4::magnitude() {
     );
 }
 
-float Vector4::angle(Vector4 inputvctr) {
+float Vector4::angle(const Vector4& inputvctr) const {
     float Product = dotproduct(inputvctr);
     float Magnitude = magnitude() * inputvctr.magnitude();
     return acos(Product / Magnitude) * (180 / PI);
 }
 
-Vector4 Vector4::unitvector() { 
-    Vector4 resultVector;
+Vector4 Vector4::unitvector() const { 
     float denominator = magnitude();
-
-    return resultVector = {
+    return Vector4{
         x/denominator,
         y/denominator,
         z/denominator,
@@ -57,42 +57,36 @@ Vector4 Vector4::unitvector() {
     };
 }
 
-Vector4 Vector4::resultant(Vector4 inputvctr) {
-    Vector4 resultVector;
-
-    return resultVector = {
-        x + inputvctr.x,
-        y + inputvctr.y,
-        z + inputvctr.z,
-        w + inputvctr.w
+Vector4 Vector4::resultant(const Vector4& inputvctr) const {
+    return Vector4{
+        this->x + inputvctr.x,
+        this->y + inputvctr.y,
+        this->z + inputvctr.z,
+        this->w + inputvctr.w
     };
 }
 
-Vector4 Vector4::add(Vector4 inputvctr) {
-    Vector4 resultVector;
-    return resultVector = {
-        x + inputvctr.x,
-        y + inputvctr.y,
-        z + inputvctr.z,
-        w + inputvctr.w
+Vector4 Vector4::add(const Vector4& inputvctr) const {
+    return Vector4{
+        this->x + inputvctr.x,
+        this->y + inputvctr.y,
+        this->z + inputvctr.z,
+        this->w + inputvctr.w
     };
 }
 
-Vector4 Vector4::subtract(Vector4 inputvctr) {
-    Vector4 resultVector;
-    return resultVector = {
-        x - inputvctr.x,
-        y - inputvctr.y,
-        z - inputvctr.z,
-        w - inputvctr.w
+Vector4 Vector4::subtract(const Vector4& inputvctr) const {
+    return Vector4{
+        this->x - inputvctr.x,
+        this->y - inputvctr.y,
+        this->z - inputvctr.z,
+        this->w - inputvctr.w
     };
 }
 
 // TODO FIX THIS STUPID OVERLOAD
-Vector4 Vector4::scale(float scale) {
-    Vector4 resultVector;
-
-    return resultVector = {
+Vector4 Vector4::scale(const float& scale) const {
+    return Vector4 {
         x * scale,
         y * scale,
         z * scale,
@@ -100,10 +94,8 @@ Vector4 Vector4::scale(float scale) {
     };
 }
 
-Vector4 Vector4::scale(Matrix4x4 inputmtrx) {
-    Vector4 resultVector;
-
-    return resultVector = {
+Vector4 Vector4::scale(const Matrix4x4& inputmtrx) const {
+    return Vector4 {
         x * inputmtrx.matrix[0][0],
         y * inputmtrx.matrix[1][1],
         z * inputmtrx.matrix[2][2],
@@ -137,10 +129,8 @@ Vector4 Vector4::scale(Matrix4x4 inputmtrx) {
 //		return resultVector;
 //	}
 
-Vector4 Vector4::translate(Matrix4x4 inputmtrx) {
-    Vector4 resultVector;
-
-    return resultVector = {
+Vector4 Vector4::translate(const Matrix4x4& inputmtrx) const {
+    return Vector4{
         x + inputmtrx.matrix[0][3],
         y + inputmtrx.matrix[1][3],
         z + inputmtrx.matrix[2][3],
@@ -168,8 +158,7 @@ Vector4 Vector4::translate(Matrix4x4 inputmtrx) {
 //    }
 //}
 
-Vector4 Vector4::operator*(const Matrix4x4& right) { 
-    Vector4 resultVector;
+Vector4 Vector4::operator*(const Matrix4x4& right) const {
     float local_vector_array[4] = {x, y, z, w};
     float result_vector_array[4] = {0, 0, 0, 0};
     for (int i = 0; i < 4; i++){
@@ -177,7 +166,7 @@ Vector4 Vector4::operator*(const Matrix4x4& right) {
             result_vector_array[i] += right.matrix[i][j] * local_vector_array[j];
         }
     }
-    return resultVector = {
+    return Vector4{
         result_vector_array[0],
         result_vector_array[1],
         result_vector_array[2],
@@ -198,37 +187,32 @@ Vector4 Vector4::operator*(const Matrix4x4& right) {
 //    return *this;
 //}
 
-Vector4 Vector4::operator+(const Vector4& right) {
-    return add(right);
+Vector4 Vector4::operator+(const Vector4& right) const {
+    return this->add(right);
 }
 
 Vector4& Vector4::operator+=(const Vector4& right) {
-    Vector4 resultVector = add(right);
-    x = resultVector.x;
-    y = resultVector.y;
-    z = resultVector.z;
-    w = resultVector.w;
-    return *this;
+    return *this = this->add(right);
 }
 
-Vector4 Vector4::operator-(const Vector4& right) {
-    return subtract(right);
+Vector4 Vector4::operator-(const Vector4& right) const {
+    return this->subtract(right);
 }
 
 Vector4& Vector4::operator-=(const Vector4& right) {
-    Vector4 resultVector = subtract(right);
-    x = resultVector.x;
-    y = resultVector.y;
-    z = resultVector.z;
-    w = resultVector.w;
-    return *this;
+    return *this = this->subtract(right);
 }
 
-Vector4 Vector4::operator^(const float power) {
+Vector4 Vector4::operator^(const float& power) const {
     return {
-        (float)pow(x, power),
-            (float)pow(y, power),
-            (float)pow(z, power),
-            (float)pow(w, power)
+        static_cast<float>(pow(x, power)),
+        static_cast<float>(pow(y, power)),
+        static_cast<float>(pow(z, power)),
+        static_cast<float>(pow(w, power))
     };
+}
+
+float Vector4::operator[](const int& index) const { // bad hack for now, but will fix in the future
+    if (index == 0) { return x; } else if (index == 1) { return y; } else if (index == 2) { return z; }
+    else if (index == 3) { return w; } else { throw index; }
 }
