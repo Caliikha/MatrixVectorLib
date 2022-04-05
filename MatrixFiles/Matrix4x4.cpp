@@ -1,7 +1,5 @@
 #include "Matrix4x4.h"
-// TODO add [gh]
 #include "Matrix3x3.h"
-// TODO add [gh]
 #include <cmath>
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342
 
@@ -18,7 +16,7 @@ Matrix4x4::Matrix4x4(
     this->matrix[3][0] = a12; this->matrix[3][1] = a13; this->matrix[3][2] = a14; this->matrix[3][3] = a15;
 }
 
-Matrix4x4 Matrix4x4::identity() const {
+Matrix4x4 Matrix4x4::identity() {
     return Matrix4x4
     {
         1, 0, 0, 0,
@@ -59,7 +57,7 @@ void Matrix4x4::input(Matrix4x4& inputmtrx) {
     }
 }
 
-Matrix3x3 Matrix4x4::minormtrx(const int& ith_row, const int& jth_col) const {
+Matrix3x3 Matrix4x4::minormtrx(const int& ith_row, const int& jth_col) const noexcept {
     Matrix3x3 resultMtrx;
     int i_2 = 0;
     for (int i = 0; i < Rows; i++){
@@ -80,22 +78,22 @@ Matrix3x3 Matrix4x4::minormtrx(const int& ith_row, const int& jth_col) const {
 }
 
 // TODO add [gh]
-float Matrix4x4::minor(const int& ith_row, const int& jth_col) const {
+float Matrix4x4::minor(const int& ith_row, const int& jth_col) const noexcept {
     return minormtrx(ith_row, jth_col).determinant();
 }
 
 // TODO add [gh]
-Matrix3x3 Matrix4x4::cofactormtrx(const int& ith_row, const int& jth_col) const {
+Matrix3x3 Matrix4x4::cofactormtrx(const int& ith_row, const int& jth_col) const noexcept {
     return minormtrx(ith_row, jth_col).scale(pow(-1, ith_row + jth_col));
 }
 
 // TODO add [gh]
-float Matrix4x4::cofactor(const int& ith_row, const int& jth_col) const {
+float Matrix4x4::cofactor(const int& ith_row, const int& jth_col) const noexcept {
     return pow(-1, ith_row + jth_col) * minormtrx(ith_row, jth_col).determinant();
 }
 
 // TODO add [gh]
-float Matrix4x4::determinant() const {
+float Matrix4x4::determinant() const noexcept {
     float sum = 0;
     for (int i = 0; i < Cols; i++){
         sum += matrix[0][i]*cofactor(0, i);
@@ -103,7 +101,7 @@ float Matrix4x4::determinant() const {
     return sum;
 }
 
-Matrix4x4 Matrix4x4::inverse() const {
+Matrix4x4 Matrix4x4::inverse() const noexcept {
     if (determinant() == 0){
         std::cerr << "ERROR: Matrix4x4 inverse() will return undefined value due to determinant = 0" << std::endl;
     }
@@ -116,7 +114,7 @@ Matrix4x4 Matrix4x4::inverse() const {
     return matrix_of_cofactors.transpose().scale(1/determinant());
 }
 
-Matrix4x4 Matrix4x4::transpose() const {
+Matrix4x4 Matrix4x4::transpose() const noexcept {
     Matrix4x4 resultMtrx;
 
     for (int i = 0; i < Rows; i++){
@@ -128,11 +126,11 @@ Matrix4x4 Matrix4x4::transpose() const {
     return resultMtrx;
 }
 
-float Matrix4x4::trace() const {
+float Matrix4x4::trace() const noexcept {
     return (matrix[0][0] + matrix[1][1] + matrix[2][2] + matrix[3][3]);
 }
 
-Matrix4x4 Matrix4x4::scale(const float& scale) const {
+Matrix4x4 Matrix4x4::scale(const float& scale) const noexcept {
     Matrix4x4 resultMtrx;
 
     for (int i = 0; i < Rows; i++) {
@@ -144,7 +142,7 @@ Matrix4x4 Matrix4x4::scale(const float& scale) const {
     return resultMtrx;
 }
 
-Matrix4x4 Matrix4x4::multiply(const Matrix4x4& inputmtrx) const {
+Matrix4x4 Matrix4x4::multiply(const Matrix4x4& inputmtrx) const noexcept {
     Matrix4x4 resultMtrx = {};
 
     for (int i = 0; i < Rows; i++){
@@ -164,7 +162,7 @@ Matrix4x4 Matrix4x4::multiply(const Matrix4x4& inputmtrx) const {
 //      return multiply(inputmtrx.inverse());
 //	}
 
-Matrix4x4 Matrix4x4::add(const Matrix4x4& inputmtrx) const {
+Matrix4x4 Matrix4x4::add(const Matrix4x4& inputmtrx) const noexcept {
     Matrix4x4 resultMtrx;
     for (int i = 0; i < Rows; i++) {
         for (int j = 0; j < Cols; j++) {
@@ -175,7 +173,7 @@ Matrix4x4 Matrix4x4::add(const Matrix4x4& inputmtrx) const {
     return resultMtrx;
 }
 
-Matrix4x4 Matrix4x4::subtract(const Matrix4x4& inputmtrx) const {
+Matrix4x4 Matrix4x4::subtract(const Matrix4x4& inputmtrx) const noexcept {
     Matrix4x4 resultMtrx;
 
     for (int i = 0; i < Rows; i++) {
@@ -187,27 +185,27 @@ Matrix4x4 Matrix4x4::subtract(const Matrix4x4& inputmtrx) const {
     return resultMtrx;
 }
 
-Matrix4x4 Matrix4x4::operator*(const Matrix4x4& right) const {
+Matrix4x4 Matrix4x4::operator*(const Matrix4x4& right) const noexcept {
     return this->multiply(right);
 }
 
-Matrix4x4& Matrix4x4::operator*=(const Matrix4x4& right) {
+Matrix4x4& Matrix4x4::operator*=(const Matrix4x4& right) noexcept {
     return *this = this->multiply(right);
 }
 
-Matrix4x4 Matrix4x4::operator+(const Matrix4x4& right) const {
+Matrix4x4 Matrix4x4::operator+(const Matrix4x4& right) const noexcept {
     return this->add(right);
 }
 
-Matrix4x4& Matrix4x4::operator+=(const Matrix4x4& right) {
+Matrix4x4& Matrix4x4::operator+=(const Matrix4x4& right) noexcept {
     return *this = this->add(right);
 }
 
-Matrix4x4 Matrix4x4::operator-(const Matrix4x4& right) const {
+Matrix4x4 Matrix4x4::operator-(const Matrix4x4& right) const noexcept {
     return this->subtract(right);
 }
 
-Matrix4x4& Matrix4x4::operator-=(const Matrix4x4& right) {
+Matrix4x4& Matrix4x4::operator-=(const Matrix4x4& right) noexcept {
     return *this = this->subtract(right);
 }
 

@@ -2,9 +2,9 @@
 // Templated functions must reside in Header file, therefore there is no .cpp Implementation file like the other files in this library
 #pragma once
 #include <iostream>
-#include "Vector4.h"
-#include "Vector3.h"
-#include "Vector2.h"
+#include "Vector4.hpp"
+#include "Vector3.hpp"
+#include "Vector2.hpp"
 #include "../MatrixFiles/Matrix4x4.h"
 #include "../MatrixFiles/Matrix3x3.h"
 #include <cmath>
@@ -14,14 +14,14 @@
 
 class Quaternion : public Vector4 {
 public:
-    Quaternion(const float& a = 0, const float& b = 0, const float& c = 0, const float& d = 0) : Vector4(a, b, c, d) {};
-    Quaternion(const Vector4& Vector_4D) : Quaternion(Vector_4D.x, Vector_4D.y, Vector_4D.z, Vector_4D.w) {};
-    Quaternion(const Vector3& Vector_3D) : Quaternion(Vector_3D.x, Vector_3D.y, Vector_3D.z) {};
-    Quaternion(const float& a, const Vector3& Vector_3D) : Quaternion(Vector_3D.x, Vector_3D.y, Vector_3D.z, a) {}
-    Quaternion(const Vector3& Vector_3D, const float& a) : Quaternion(Vector_3D.x, Vector_3D.y, Vector_3D.z, a) {}
+    constexpr Quaternion(const float& a = 0, const float& b = 0, const float& c = 0, const float& d = 0) : Vector4(a, b, c, d) {};
+    constexpr Quaternion(const Vector4& Vector_4D) : Quaternion(Vector_4D.x, Vector_4D.y, Vector_4D.z, Vector_4D.w) {};
+    constexpr Quaternion(const Vector3& Vector_3D) : Quaternion(Vector_3D.x, Vector_3D.y, Vector_3D.z) {};
+    constexpr Quaternion(const float& a, const Vector3& Vector_3D) : Quaternion(Vector_3D.x, Vector_3D.y, Vector_3D.z, a) {}
+    constexpr Quaternion(const Vector3& Vector_3D, const float& a) : Quaternion(Vector_3D.x, Vector_3D.y, Vector_3D.z, a) {}
 
     template <typename numerictype = float>
-    inline constexpr Quaternion& operator<<(const numerictype& Real) {
+    inline constexpr Quaternion& operator<<(const numerictype& Real) noexcept {
         static_assert(
                    std::is_same<numerictype, float>::value 
                 || std::is_same<numerictype, double>::value 
@@ -32,9 +32,9 @@ public:
         return *this;
     }
 
-    inline Quaternion& operator<<(const Vector4& Vprime) { return *this = {Vprime.x, Vprime.y, Vprime.z, Vprime.w}; }
+    inline Quaternion& operator<<(const Vector4& Vprime) noexcept { return *this = {Vprime.x, Vprime.y, Vprime.z, Vprime.w}; }
     
-    inline Quaternion& operator<<(const Vector3& Vprime) { return *this = {Vprime.x, Vprime.y, Vprime.z, w}; }
+    inline Quaternion& operator<<(const Vector3& Vprime) noexcept { return *this = {Vprime.x, Vprime.y, Vprime.z, w}; }
 
     inline static void input(Vector4 &inputvctr) {
         std::cin >> inputvctr.x >> inputvctr.y >> inputvctr.z >> inputvctr.w;
@@ -562,10 +562,10 @@ public:
                 is_4D || is_3D || is_2D,
                    "Quaternion crossproduct<ARG>(Quaternion) accepts Quaternion function arguments with a specified <Vector4>[default] or <Vector3> template specification\nFor reference documentation please visit the Main.cpp file in https://github.com/Caliikha/MatrixVectorLib");
         if constexpr (is_4D) {
-            return Quaternion { static_cast<Vector3>(*this).crossproduct(static_cast<Vector3>(inputquat))};
+            return Quaternion { Vector3(this->x,this->y,this->z).crossproduct(Vector3(inputquat.x, inputquat.y, inputquat.z))};
         }
         else if constexpr (is_3D) {
-            return Quaternion { static_cast<Vector3>(*this).crossproduct(static_cast<Vector3>(inputquat))};
+            return Quaternion { Vector3(this->x,this->y,this->z).crossproduct(Vector3(inputquat.x, inputquat.y, inputquat.z))};
         }
         else if constexpr (is_2D) {
             return Quaternion {Vector2(x, y).crossproduct(Vector2(inputquat.x, inputquat.y))};
@@ -645,7 +645,7 @@ public:
         }
     }
 
-    inline Quaternion operator*(const Matrix4x4& right) const noexcept {
+    inline constexpr Quaternion operator*(const Matrix4x4& right) const noexcept {
         Quaternion resultVector;
         float local_vector_array[4] = {x, y, z, w};
         float result_vector_array[4] = {0, 0, 0, 0};
@@ -662,31 +662,31 @@ public:
         };
     }
 
-    inline Quaternion operator*(const Vector4& right) const noexcept {
+    inline constexpr Quaternion operator*(const Vector4& right) const noexcept {
         return crossproduct<Vector4>(right);
     }
 
-    inline Quaternion& operator*=(const Vector4& right) noexcept {
+    inline constexpr Quaternion& operator*=(const Vector4& right) noexcept {
         return *this = crossproduct<Vector4>(right);
     }
 
-    inline Quaternion operator+(const Vector4& right) const noexcept {
+    inline constexpr Quaternion operator+(const Vector4& right) const noexcept {
         return add<Quaternion>(right);
     }
 
-    inline Quaternion& operator+=(const Vector4& right) noexcept {
+    inline constexpr Quaternion& operator+=(const Vector4& right) noexcept {
         return *this = add<Quaternion>(right);
     }
 
-    inline Quaternion operator-(const Vector4& right) const noexcept {
+    inline constexpr Quaternion operator-(const Vector4& right) const noexcept {
         return subtract<Quaternion>(right);
     }
 
-    inline Quaternion& operator-=(const Vector4& right) noexcept {
+    inline constexpr Quaternion& operator-=(const Vector4& right) noexcept {
         return *this = subtract<Quaternion>(right);
     }
 
-    inline Quaternion operator^(const float& power) const noexcept {
+    inline constexpr Quaternion operator^(const float& power) const noexcept {
         if (power == -1) {
             return inverse();
         }

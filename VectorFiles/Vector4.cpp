@@ -7,7 +7,7 @@
 #define INT_MIN -2147483648
 #define INT_MAX  2147483647
 
-Vector4::Vector4(const float& a, const float& b, const float& c, const float& d) : x(a), y(b), z(c), w(d) {};
+constexpr Vector4::Vector4(const float& a, const float& b, const float& c, const float& d) : x(a), y(b), z(c), w(d) {};
 
 void Vector4::input(Vector4 &inputvctr) { 
     std::cin >> inputvctr.x >> inputvctr.y >> inputvctr.z >> inputvctr.w;
@@ -24,7 +24,7 @@ void Vector4::showResult(const Vector4& inputvctr) {
     std::cout << '(' << inputvctr.x << ", " << inputvctr.y << ", " << inputvctr.z << ", " << inputvctr.w << ')' << '\n';
 }
 
-float Vector4::dotproduct(const Vector4& inputvctr) const {
+constexpr float Vector4::dotproduct(const Vector4& inputvctr) const noexcept{
     return 
          (x * inputvctr.x) 
         +(y * inputvctr.y) 
@@ -32,7 +32,7 @@ float Vector4::dotproduct(const Vector4& inputvctr) const {
         +(w * inputvctr.w);
 }
 
-float Vector4::magnitude() const {
+constexpr float Vector4::magnitude() const noexcept{
     return sqrt(
                 pow(x, 2) 
                +pow(y, 2) 
@@ -41,13 +41,13 @@ float Vector4::magnitude() const {
     );
 }
 
-float Vector4::angle(const Vector4& inputvctr) const {
+constexpr float Vector4::angle(const Vector4& inputvctr) const noexcept{
     float Product = dotproduct(inputvctr);
     float Magnitude = magnitude() * inputvctr.magnitude();
     return acos(Product / Magnitude) * (180 / PI);
 }
 
-Vector4 Vector4::unitvector() const { 
+constexpr Vector4 Vector4::unitvector() const noexcept{ 
     float denominator = magnitude();
     return Vector4{
         x/denominator,
@@ -57,7 +57,7 @@ Vector4 Vector4::unitvector() const {
     };
 }
 
-Vector4 Vector4::resultant(const Vector4& inputvctr) const {
+constexpr Vector4 Vector4::resultant(const Vector4& inputvctr) const noexcept{
     return Vector4{
         this->x + inputvctr.x,
         this->y + inputvctr.y,
@@ -66,7 +66,7 @@ Vector4 Vector4::resultant(const Vector4& inputvctr) const {
     };
 }
 
-Vector4 Vector4::add(const Vector4& inputvctr) const {
+constexpr Vector4 Vector4::add(const Vector4& inputvctr) const noexcept{
     return Vector4{
         this->x + inputvctr.x,
         this->y + inputvctr.y,
@@ -75,7 +75,7 @@ Vector4 Vector4::add(const Vector4& inputvctr) const {
     };
 }
 
-Vector4 Vector4::subtract(const Vector4& inputvctr) const {
+constexpr Vector4 Vector4::subtract(const Vector4& inputvctr) const noexcept{
     return Vector4{
         this->x - inputvctr.x,
         this->y - inputvctr.y,
@@ -85,7 +85,7 @@ Vector4 Vector4::subtract(const Vector4& inputvctr) const {
 }
 
 // TODO FIX THIS STUPID OVERLOAD
-Vector4 Vector4::scale(const float& scale) const {
+constexpr Vector4 Vector4::scale(const float& scale) const noexcept{
     return Vector4 {
         x * scale,
         y * scale,
@@ -94,7 +94,7 @@ Vector4 Vector4::scale(const float& scale) const {
     };
 }
 
-Vector4 Vector4::scale(const Matrix4x4& inputmtrx) const {
+constexpr Vector4 Vector4::scale(const Matrix4x4& inputmtrx) const noexcept{
     return Vector4 {
         x * inputmtrx.matrix[0][0],
         y * inputmtrx.matrix[1][1],
@@ -129,7 +129,7 @@ Vector4 Vector4::scale(const Matrix4x4& inputmtrx) const {
 //		return resultVector;
 //	}
 
-Vector4 Vector4::translate(const Matrix4x4& inputmtrx) const {
+constexpr Vector4 Vector4::translate(const Matrix4x4& inputmtrx) const noexcept{
     return Vector4{
         x + inputmtrx.matrix[0][3],
         y + inputmtrx.matrix[1][3],
@@ -158,7 +158,7 @@ Vector4 Vector4::translate(const Matrix4x4& inputmtrx) const {
 //    }
 //}
 
-Vector4 Vector4::operator*(const Matrix4x4& right) const {
+constexpr Vector4 Vector4::operator*(const Matrix4x4& right) const noexcept{
     float local_vector_array[4] = {x, y, z, w};
     float result_vector_array[4] = {0, 0, 0, 0};
     for (int i = 0; i < 4; i++){
@@ -187,23 +187,23 @@ Vector4 Vector4::operator*(const Matrix4x4& right) const {
 //    return *this;
 //}
 
-Vector4 Vector4::operator+(const Vector4& right) const {
+constexpr Vector4 Vector4::operator+(const Vector4& right) const noexcept{
     return this->add(right);
 }
 
-Vector4& Vector4::operator+=(const Vector4& right) {
+constexpr Vector4& Vector4::operator+=(const Vector4& right) noexcept{
     return *this = this->add(right);
 }
 
-Vector4 Vector4::operator-(const Vector4& right) const {
+constexpr Vector4 Vector4::operator-(const Vector4& right) const noexcept{
     return this->subtract(right);
 }
 
-Vector4& Vector4::operator-=(const Vector4& right) {
+constexpr Vector4& Vector4::operator-=(const Vector4& right) noexcept{
     return *this = this->subtract(right);
 }
 
-Vector4 Vector4::operator^(const float& power) const {
+constexpr Vector4 Vector4::operator^(const float& power) const noexcept{
     return {
         static_cast<float>(pow(x, power)),
         static_cast<float>(pow(y, power)),
@@ -212,7 +212,21 @@ Vector4 Vector4::operator^(const float& power) const {
     };
 }
 
-float Vector4::operator[](const int& index) const { // bad hack for now, but will fix in the future
-    if (index == 0) { return x; } else if (index == 1) { return y; } else if (index == 2) { return z; }
-    else if (index == 3) { return w; } else { throw index; }
+constexpr float Vector4::operator[](const int& index) const { // bad hack for now, but will fix in the future
+    switch(index) {
+        case 0:
+            return this->x;
+            break;
+        case 1:
+            return this->y;
+            break;
+        case 2:
+            return this->z;
+            break;
+        case 3:
+            return this->w;
+            break;
+        default:
+            throw index;
+    }
 }

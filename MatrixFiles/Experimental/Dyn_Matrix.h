@@ -2,7 +2,7 @@
 #include <iostream>
 
 template <int Rows, int Cols>
-class Matrix{
+class Matrix {
 public:
     float **matrix = new (std::nothrow) float*[Rows]{};
 

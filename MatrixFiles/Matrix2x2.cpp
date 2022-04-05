@@ -9,11 +9,11 @@ Matrix2x2::Matrix2x2(
     this->matrix[1][0] = a2; this->matrix[1][1] = a3;
 }
 
-Matrix2x2 Matrix2x2::identity() const {
+Matrix2x2 Matrix2x2::identity() {
     return Matrix2x2
     {
-        0, 1, 
-        1, 0
+        1, 0, 
+        0, 1
     };
 }
 
@@ -48,12 +48,12 @@ void Matrix2x2::input(Matrix2x2& inputmtrx) {
     }
 }
 
-float Matrix2x2::determinant() const {
+float Matrix2x2::determinant() const noexcept {
     return ((matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]));
 }
 
-Matrix2x2 Matrix2x2::inverse() const {
-    float Constant = 1 / determinant();
+Matrix2x2 Matrix2x2::inverse() const noexcept {
+    const float Constant = 1 / determinant();
     return Matrix2x2
     {
         Constant * matrix[1][1], Constant * -matrix[0][1],
@@ -61,7 +61,7 @@ Matrix2x2 Matrix2x2::inverse() const {
     };
 }
 
-Matrix2x2 Matrix2x2::transpose() const {
+Matrix2x2 Matrix2x2::transpose() const noexcept {
     Matrix2x2 resultMtrx;
 
     for (int i = 0; i < Rows; i++){
@@ -73,11 +73,11 @@ Matrix2x2 Matrix2x2::transpose() const {
     return resultMtrx;
 }
 
-float Matrix2x2::trace() const {
+float Matrix2x2::trace() const noexcept {
     return (matrix[0][0] + matrix[1][1]);
 }
 
-Matrix2x2 Matrix2x2::scale(const float& scale) const {
+Matrix2x2 Matrix2x2::scale(const float& scale) const noexcept {
     Matrix2x2 resultMtrx;
 
     for (int i = 0; i < Rows; i++) {
@@ -89,7 +89,7 @@ Matrix2x2 Matrix2x2::scale(const float& scale) const {
     return resultMtrx;
 }
 
-Matrix2x2 Matrix2x2::multiply(const Matrix2x2& inputmtrx) const {
+Matrix2x2 Matrix2x2::multiply(const Matrix2x2& inputmtrx) const noexcept {
     Matrix2x2 resultMtrx = {};
 
     for (int i = 0; i < Rows; i++){
@@ -103,11 +103,11 @@ Matrix2x2 Matrix2x2::multiply(const Matrix2x2& inputmtrx) const {
     return resultMtrx;
 }
 
-Matrix2x2 Matrix2x2::divide(const Matrix2x2& inputmtrx) const {
+Matrix2x2 Matrix2x2::divide(const Matrix2x2& inputmtrx) const noexcept {
     return multiply(inputmtrx.inverse());
 }
 
-Matrix2x2 Matrix2x2::add(const Matrix2x2& inputmtrx) const {
+Matrix2x2 Matrix2x2::add(const Matrix2x2& inputmtrx) const noexcept {
     Matrix2x2 resultMtrx;
 
     for (int i = 0; i < 2; i++) {
@@ -119,7 +119,7 @@ Matrix2x2 Matrix2x2::add(const Matrix2x2& inputmtrx) const {
     return resultMtrx;
 }
 
-Matrix2x2 Matrix2x2::subtract(const Matrix2x2& inputmtrx) const {
+Matrix2x2 Matrix2x2::subtract(const Matrix2x2& inputmtrx) const noexcept {
     Matrix2x2 resultMtrx;
 
     for (int i = 0; i < 2; i++) {
@@ -131,35 +131,35 @@ Matrix2x2 Matrix2x2::subtract(const Matrix2x2& inputmtrx) const {
     return resultMtrx;
 }
 
-Matrix2x2 Matrix2x2::operator*(const Matrix2x2& right) const {
+Matrix2x2 Matrix2x2::operator*(const Matrix2x2& right) const noexcept {
     return this->multiply(right);
 }
 
-Matrix2x2& Matrix2x2::operator*=(const Matrix2x2& right) {
+Matrix2x2& Matrix2x2::operator*=(const Matrix2x2& right) noexcept {
     return *this = this->multiply(right);
 }
 
-Matrix2x2 Matrix2x2::operator/(const Matrix2x2& right) const {
+Matrix2x2 Matrix2x2::operator/(const Matrix2x2& right) const noexcept {
     return this->divide(right);
 }
 
-Matrix2x2& Matrix2x2::operator/=(const Matrix2x2& right) {
+Matrix2x2& Matrix2x2::operator/=(const Matrix2x2& right) noexcept {
     return *this = this->divide(right);
 }
 
-Matrix2x2 Matrix2x2::operator+(const Matrix2x2& right) const {
+Matrix2x2 Matrix2x2::operator+(const Matrix2x2& right) const noexcept {
     return this->add(right);
 }
 
-Matrix2x2& Matrix2x2::operator+=(const Matrix2x2& right) {
+Matrix2x2& Matrix2x2::operator+=(const Matrix2x2& right) noexcept {
     return *this = this->add(right);
 }
 
-Matrix2x2 Matrix2x2::operator-(const Matrix2x2& right) const {
+Matrix2x2 Matrix2x2::operator-(const Matrix2x2& right) const noexcept {
     return this->subtract(right);
 }
 
-Matrix2x2& Matrix2x2::operator-=(const Matrix2x2& right) {
+Matrix2x2& Matrix2x2::operator-=(const Matrix2x2& right) noexcept {
     return *this = this->subtract(right);
 }
 

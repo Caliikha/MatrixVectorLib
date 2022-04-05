@@ -27,45 +27,74 @@ std::ofstream& printV(std::ofstream& outputfile, const vectype outputvector){
 
 int main()
 {
-    Quaternion ex = {1, 2, 3, 4};
-    //Quaternion::showResult(ex.dotproduct(Vector4(1, 1, 0, 0)));
-    //Vector4* ptr = &ex;
-    //Quaternion::showResult(ptr->dotproduct(Vector4(1, 1, 0, 0)));
-    Quaternion::showResult(ex.dotproduct(ex));
-    std::cout << "================================================\n";
-    Quaternion A = Quaternion{0, 1, 1, 0}.unitquaternion();
-    A.printquaternion();
-    Quaternion E = {0, 3, 0, 0};
-
-    Quaternion::showResult(A * E * A.inverse());
-    std::cout << "--------\n";
-
     std::ofstream outputfile("./pygraphing/testgraphing.txt");
 
     Vector3 Vq = Vector3{0, 0, 1}.unitvector();
-    Vector3 v = Vector3{1, -2, 1}.unitvector();
-    float theta = 3*PI;
-    
-    Vector3::showResult(Vq.crossproduct(v).crossproduct(Vq.scale(-1)));
-    Vector3::showResult(Vq.scale(-1*Vq.dotproduct(v))
-                       .subtract(
-                        Vq.scale(v.dotproduct(Vq.scale(-1)))));
+    Vector3 v = Vector3{0, 1, 2}.unitvector();
+    float theta = 2*PI;
+
+    Quaternion A =  Quaternion( cos(PI/2), Vector3(1, 1, 0).scale(sin(PI/2)));
+    Quaternion dA = Quaternion(-sin(PI/2), Vector3(1, 1, 0).scale(cos(PI/2)));
+    Quaternion B = Quaternion(0, Vector3(0,1,0));
+    Quaternion Ai = Quaternion( cos(PI/2), Vector3(1, 1, 0).scale(-sin(PI/2)));
+    Quaternion dAi = Quaternion(-sin(PI/2), Vector3(1, 1, 0).scale(-cos(PI/2)));
+
+    std::cout << "-------------------------------\n";
+
+    dA.multiply(B).multiply(Ai)
+    .add(
+    A.multiply(B).multiply(dAi)
+            )
+    .printquaternion();
+
+    Vector3 vA = Vector3(A.x,A.y,A.z);
+    Vector3 vB = Vector3(B.x,B.y,B.z);
+    Vector3 vAi= Vector3(-A.x,-A.y,-A.z);
+
+    Quaternion( vA.dotproduct(vA.dotproduct(vB)*sin(PI)) - vA.dotproduct(vB)*2*cos(PI), Vector3( vA.crossproduct(vB).scale(2*cos(PI)) .add( vA.crossproduct(vB).crossproduct(vAi) .add( vA.scale(vA.dotproduct(vB))).scale(sin(PI))))).printquaternion();
+
+//    Quaternion(
+//            vA.dotproduct(vA.dotproduct(vB)*sin(PI)) - vA.dotproduct(vB)*2*cos(PI),
+//            Vector3(
+//                vA.crossproduct(vB).scale(2*cos(PI))
+//                .add(
+//                    vA.crossproduct(vB).crossproduct(vAi)
+//                    .add(
+//                        vA.scale(vA.dotproduct(vB))
+//                        ).scale(sin(PI))
+//                    )
+//                )
+//            ).printquaternion();
+
+    std::cout << "-------------------------------\n";
+
+    Quaternion Axis = Quaternion(cos(PI/2), Vector3(1,0,0).scale(sin(PI/2)));
+    Quaternion rotor = Quaternion(0, Vector3(0,1,0));
+
+    (Axis*rotor*Axis.inverse()).printquaternion();
+
+    Quaternion orig = (
+     Quaternion(-sin(PI/2), rotor.scalef(cos(PI/2))).multiply(rotor).multiply(Axis.inverse())
+     );
+    orig.printquaternion();
+
+    Quaternion derived = (Axis.multiply(rotor).multiply(Axis.inverse()).subtract(rotor).scalef(sin(PI)).subtract(Quaternion(Axis.dotproduct(rotor),0,0,0)));
+    derived.printquaternion();
+
+    (orig - derived).printquaternion();
+
+    //(Quaternion(cos(PI/2), Vector3(1,0,0).scale(sin(PI/2)))*Quaternion(0,Vector3(0,1,0))*Quaternion(cos(PI/2), Vector3(1,0,0).scale(-sin(PI/2)))).printquaternion();
+
+    //(Quaternion(cos(PI/2), Vector3(1,0,0).scale(sin(PI/2))).multiply(Quaternion(0,Vector3(0,1,0))).multiply(Quaternion(cos(PI/2), Vector3(1,0,0).scale(-sin(PI/2))))).printquaternion();
 
 
-    A = Vq;
-    E = v;
-    Vector3::showResult(static_cast<Vector3>(A.crossproduct<Vector3>(E).crossproduct<Vector3>(A.inverse())));
-    Vector3::showResult(static_cast<Vector3>(
-                A.inverse().scalef(A.dotproduct<Vector3>(E)))
-            .subtract(
-                A.scalef(A.inverse().dotproduct<Vector3>(E))));
 
     outputfile.close();
     outputfile = std::ofstream("interpolation.txt");
 
-    Quaternion Vq_q;
-    Quaternion v_q = v;
-    int steps = 50;
+    Quaternion Vq_q = Quaternion(1, 0, 0);
+    Quaternion v_q = Quaternion(0, 0, 1);
+    int steps = 100;
 //    for (int i = 0; i < steps; i++){
 //        float temp_angle = i*(theta/steps);
 //        Vq_q = Quaternion(-sin(temp_angle/2), Vq.unitvector().scale(cos(temp_angle/2)));
@@ -74,11 +103,18 @@ int main()
 //    }
     for (int i = 0; i < steps; i++){
         float temp_angle = i*(theta/steps);
-        //Vector3 data = (Vq.crossproduct(v).crossproduct(Vq.scale(-1)).add(Vq.scale(Vq.dotproduct(v)))).scale(cos(temp_angle)*cos(temp_angle)).add((v.crossproduct(Vq).scale(2*sin(temp_angle)*cos(temp_angle)))).add(v.scale(sin(temp_angle)*sin(temp_angle)));
-        //Vector3 data = (Vq.crossproduct(v).crossproduct(Vq.scale(-1))).add(Vq.scale(Vq.dotproduct(v))).scale(cos(temp_angle)*cos(temp_angle)).add((v.crossproduct(Vq).scale(2*sin(temp_angle)*cos(temp_angle)))).add(v.scale(sin(temp_angle)*sin(temp_angle)));
-        Vector3 data = {temp_angle-1.5*PI, sin(temp_angle), 0};
+        Vq_q = Quaternion(-sin(temp_angle/2), Vq.unitvector().scale(cos(temp_angle/2)));
+        //Quaternion data = Vq_q.multiply(v_q).multiply(Vq_q.inverse());
+        Quaternion data;// = (Vq.crossproduct(v).crossproduct(Vq.scale(-1)).add(Vq.scale(Vq.dotproduct(v))).scale(cos(temp_angle/2)*cos(temp_angle/2)).add(v.crossproduct(Vq).scale(sin(temp_angle))).add(v.scale(sin(temp_angle/2)*sin(temp_angle/2))));
+
+        data = (v.scale(-1).add(Vq.scale(Vq.dotproduct(v))).scale(cos(temp_angle/2)*cos(temp_angle/2)).add(v.crossproduct(Vq).scale(sin(temp_angle))).add(v.scale(sin(temp_angle/2)*sin(temp_angle/2))));
+    //    Vector3 data = Vector3(
+    //              Vq_q.x*(sin(theta - temp_angle)/sin(theta)) - v_q.x*(sin(theta - temp_angle)/sin(theta))
+    //            , Vq_q.y*(sin(theta - temp_angle)/sin(theta)) - v_q.y*(sin(theta - temp_angle)/sin(theta))
+    //            , Vq_q.z*(sin(theta - temp_angle)/sin(theta)) - v_q.z*(sin(theta - temp_angle)/sin(theta)));
         printV(outputfile, data);
     }
+    outputfile.close();
 
     //Vector3::showResult((Vq.crossproduct(v).crossproduct(Vq.scale(-1))
     //                      + Vq.scale(Vq.dotproduct(v))).scale(cos(theta)*cos(theta))
