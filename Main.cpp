@@ -3,9 +3,9 @@
 #include "./MatrixFiles/Matrix3x3.h"
 #include "./MatrixFiles/Matrix4x4.h"
 //#include "./MatrixFiles/Dyn_Matrix.h"
-#include "./VectorFiles/Vector4.h"
-#include "./VectorFiles/Vector3.h"
-#include "./VectorFiles/Vector2.h"
+#include "./VectorFiles/Vector4.hpp"
+#include "./VectorFiles/Vector3.hpp"
+#include "./VectorFiles/Vector2.hpp"
 //#include "./VectorFiles/Dyn_Vector.h"
 //#include "./VectorFiles/vector-experiment.h"
 //#include <chrono>
@@ -13,7 +13,7 @@
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342
 #include <cmath>
 #include <fstream>
-#include "./VectorFiles/Quaternion.h"
+#include "./VectorFiles/Quaternion.hpp"
 
 template <class vectype = Vector3>
 std::ofstream& printV(std::ofstream& outputfile, const vectype outputvector){
@@ -73,15 +73,15 @@ int main()
 
     (Axis*rotor*Axis.inverse()).printquaternion();
 
-    Quaternion orig = (
-     Quaternion(-sin(PI/2), rotor.scalef(cos(PI/2))).multiply(rotor).multiply(Axis.inverse())
-     );
-    orig.printquaternion();
+//    Quaternion orig = (
+//     Quaternion(-sin(PI/2), rotor.scalef(cos(PI/2))).multiply(rotor).multiply(Axis.inverse())
+//     );
+//    orig.printquaternion();
 
     Quaternion derived = (Axis.multiply(rotor).multiply(Axis.inverse()).subtract(rotor).scalef(sin(PI)).subtract(Quaternion(Axis.dotproduct(rotor),0,0,0)));
     derived.printquaternion();
 
-    (orig - derived).printquaternion();
+    //(orig - derived).printquaternion();
 
     //(Quaternion(cos(PI/2), Vector3(1,0,0).scale(sin(PI/2)))*Quaternion(0,Vector3(0,1,0))*Quaternion(cos(PI/2), Vector3(1,0,0).scale(-sin(PI/2)))).printquaternion();
 

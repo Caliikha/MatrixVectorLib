@@ -3,7 +3,7 @@
 #pragma once
 #include <iostream>
 #include "Vector3.hpp"
-#include "../MatrixFiles/Matrix2x2.cpp"
+#include "../MatrixFiles/Matrix2x2.h"
 
 class Vector3;
 //class Matrix2x2;

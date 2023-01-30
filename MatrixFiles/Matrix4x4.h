@@ -19,30 +19,30 @@ public:
             const float& a12 = 0, const float& a13 = 0, const float& a14 = 0, const float& a15 = 0
             );
 
-	inline static Matrix4x4 identity();
+	static Matrix4x4 identity();
 	void printmtrx() const;
     template <typename TYPE>
         static void showResult(TYPE input) { std::cout << input << '\n'; }
 	static void showResult(const Matrix4x4& inputmtrx);
     static void input(Matrix4x4& inputmtrx);
-    inline Matrix3x3 minormtrx(const int& row, const int& col) const noexcept;
-    inline float minor(const int& row, const int& col) const noexcept;
-    inline Matrix3x3 cofactormtrx(const int& row, const int& col) const noexcept;
-    inline float cofactor(const int& row, const int& col) const noexcept;
-	inline float determinant() const noexcept;
-	inline Matrix4x4 inverse() const noexcept;
-    inline Matrix4x4 transpose() const noexcept;
-    inline float trace() const noexcept;
-	inline Matrix4x4 scale(const float& scale) const noexcept;
-	inline Matrix4x4 multiply(const Matrix4x4& inputmtrx) const noexcept;
-//	inline Matrix4x4 divide(Matrix4x4 inputmtrx); // TODO:Complete when determinant and inverse function exists 
-	inline Matrix4x4 add(const Matrix4x4& inputmtrx) const noexcept;
-	inline Matrix4x4 subtract(const Matrix4x4& inputmtrx) const noexcept;
-    inline Matrix4x4 operator*(const Matrix4x4& right) const noexcept;
-    inline Matrix4x4& operator*=(const Matrix4x4& right) noexcept;
-    inline Matrix4x4 operator+(const Matrix4x4& right) const noexcept;
-    inline Matrix4x4& operator+=(const Matrix4x4& right) noexcept;
-    inline Matrix4x4 operator-(const Matrix4x4& right) const noexcept;
-    inline Matrix4x4& operator-=(const Matrix4x4& right) noexcept;
-    inline const float* operator[](const int& index) const;
+    Matrix3x3 minormtrx(const int& row, const int& col) const noexcept;
+    float minor(const int& row, const int& col) const noexcept;
+    Matrix3x3 cofactormtrx(const int& row, const int& col) const noexcept;
+    float cofactor(const int& row, const int& col) const noexcept;
+	float determinant() const noexcept;
+	Matrix4x4 inverse() const noexcept;
+    Matrix4x4 transpose() const noexcept;
+    float trace() const noexcept;
+	Matrix4x4 scale(const float& scale) const noexcept;
+	Matrix4x4 multiply(const Matrix4x4& inputmtrx) const noexcept;
+//	Matrix4x4 divide(Matrix4x4 inputmtrx); // TODO:Complete when determinant and inverse function exists 
+	Matrix4x4 add(const Matrix4x4& inputmtrx) const noexcept;
+	Matrix4x4 subtract(const Matrix4x4& inputmtrx) const noexcept;
+    Matrix4x4 operator*(const Matrix4x4& right) const noexcept;
+    Matrix4x4& operator*=(const Matrix4x4& right) noexcept;
+    Matrix4x4 operator+(const Matrix4x4& right) const noexcept;
+    Matrix4x4& operator+=(const Matrix4x4& right) noexcept;
+    Matrix4x4 operator-(const Matrix4x4& right) const noexcept;
+    Matrix4x4& operator-=(const Matrix4x4& right) noexcept;
+    const float* operator[](const int& index) const;
 };
